@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Devops,supervisor,gitlab,jenkins,ansible,go,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="GitLab 安装GitLab 安装方式可以参考官方给出的教程：https://about.gitlab.com/installation/ 注：推荐使用 Docker 安装。 GitLab CI/CD参考：搭建GitLab-CI GitLab 通知 Jenkins 部署触发器参考：Gitlab-提交代码触发-Jenkins-部署 Jenkins 安装 GitLab、Ansible 插件 安装插件">
+<meta name="keywords" content="Devops,supervisor,gitlab,jenkins,ansible,go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Devops] 基于 Gitlab+Jenkins+Ansible+Supervisor实现Go项目自动化部署">
+<meta property="og:url" content="https://weixinote.com/2018/09/24/Devops-基于-Gitlab-Jenkins-Ansible-Supervisor实现Go项目自动化部署/index.html">
+<meta property="og:site_name" content="维系笔记">
+<meta property="og:description" content="GitLab 安装GitLab 安装方式可以参考官方给出的教程：https://about.gitlab.com/installation/ 注：推荐使用 Docker 安装。 GitLab CI/CD参考：搭建GitLab-CI GitLab 通知 Jenkins 部署触发器参考：Gitlab-提交代码触发-Jenkins-部署 Jenkins 安装 GitLab、Ansible 插件 安装插件">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://pa1so03xn.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-21%20%E4%B8%8B%E5%8D%884.27.46.png">
+<meta property="og:image" content="http://pa1so03xn.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-21%20%E4%B8%8B%E5%8D%884.31.00.png">
+<meta property="og:image" content="http://pa1so03xn.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-21%20%E4%B8%8B%E5%8D%884.45.47.png">
+<meta property="og:updated_time" content="2018-12-17T08:51:23.786Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[Devops] 基于 Gitlab+Jenkins+Ansible+Supervisor实现Go项目自动化部署">
+<meta name="twitter:description" content="GitLab 安装GitLab 安装方式可以参考官方给出的教程：https://about.gitlab.com/installation/ 注：推荐使用 Docker 安装。 GitLab CI/CD参考：搭建GitLab-CI GitLab 通知 Jenkins 部署触发器参考：Gitlab-提交代码触发-Jenkins-部署 Jenkins 安装 GitLab、Ansible 插件 安装插件">
+<meta name="twitter:image" content="http://pa1so03xn.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-21%20%E4%B8%8B%E5%8D%884.27.46.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://weixinote.com/2018/09/24/Devops-基于-Gitlab-Jenkins-Ansible-Supervisor实现Go项目自动化部署/">
+
+
+
+
+
+  <title>[Devops] 基于 Gitlab+Jenkins+Ansible+Supervisor实现Go项目自动化部署 | 维系笔记</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-123195177-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">维系笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">连接过去、现在、未来</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://weixinote.com/2018/09/24/Devops-基于-Gitlab-Jenkins-Ansible-Supervisor实现Go项目自动化部署/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leon Xu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="维系笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">[Devops] 基于 Gitlab+Jenkins+Ansible+Supervisor实现Go项目自动化部署</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-24T14:01:24+08:00">
+                2018-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Devops/" itemprop="url" rel="index">
+                    <span itemprop="name">Devops</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/24/Devops-基于-Gitlab-Jenkins-Ansible-Supervisor实现Go项目自动化部署/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/09/24/Devops-基于-Gitlab-Jenkins-Ansible-Supervisor实现Go项目自动化部署/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="GitLab-安装"><a href="#GitLab-安装" class="headerlink" title="GitLab 安装"></a>GitLab 安装</h3><p>GitLab 安装方式可以参考官方给出的教程：<a href="https://about.gitlab.com/installation/" target="_blank" rel="noopener">https://about.gitlab.com/installation/</a></p>
+<p>注：推荐使用 Docker 安装。</p>
+<h3 id="GitLab-CI-CD"><a href="#GitLab-CI-CD" class="headerlink" title="GitLab CI/CD"></a>GitLab CI/CD</h3><p>参考：<a href="http://blog.weixinote.com/2018/06/10/%E6%90%AD%E5%BB%BAGitLab-CI/" target="_blank" rel="noopener">搭建GitLab-CI</a></p>
+<h3 id="GitLab-通知-Jenkins-部署"><a href="#GitLab-通知-Jenkins-部署" class="headerlink" title="GitLab 通知 Jenkins 部署"></a>GitLab 通知 Jenkins 部署</h3><p>触发器参考：<a href="http://blog.weixinote.com/2018/06/10/Gitlab-%E6%8F%90%E4%BA%A4%E4%BB%A3%E7%A0%81%E8%A7%A6%E5%8F%91-Jenkins-%E9%83%A8%E7%BD%B2/" target="_blank" rel="noopener">Gitlab-提交代码触发-Jenkins-部署</a></p>
+<h3 id="Jenkins-安装-GitLab、Ansible-插件"><a href="#Jenkins-安装-GitLab、Ansible-插件" class="headerlink" title="Jenkins 安装 GitLab、Ansible 插件"></a>Jenkins 安装 GitLab、Ansible 插件</h3><ul>
+<li>安装插件的路径：系统管理 –&gt; 插件管理</li>
+</ul>
+<a id="more"></a>
+<p>插件信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">* GitLab</span><br><span class="line">This plugin integrates GitLab to Jenkins by faking a GitLab CI Server.</span><br><span class="line">* Ansible plugin</span><br><span class="line">Invoke Ansible Ad-Hoc commands and playbooks.</span><br></pre></td></tr></table></figure>
+<p><img src="http://pa1so03xn.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-21%20%E4%B8%8B%E5%8D%884.27.46.png" alt="屏幕快照 2018-09-21 下午4.27.46"></p>
+<h3 id="Jenkins-创建部署项目"><a href="#Jenkins-创建部署项目" class="headerlink" title="Jenkins 创建部署项目"></a>Jenkins 创建部署项目</h3><p>在 Jenkins 页面点击 <code>新建任务</code> 来创建一个需要部署的项目任务。</p>
+<p><img src="http://pa1so03xn.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-21%20%E4%B8%8B%E5%8D%884.31.00.png" alt="屏幕快照 2018-09-21 下午4.31.00"></p>
+<h4 id="配置项目的功能工作路径-workspace"><a href="#配置项目的功能工作路径-workspace" class="headerlink" title="配置项目的功能工作路径(workspace)"></a>配置项目的功能工作路径(workspace)</h4><p>点击 <code>General</code> 标签中的高级选项，使用自定义的工作空间，填入自定义工作空间路径：<code>/data/go/src/project</code>。</p>
+<h4 id="源码管理"><a href="#源码管理" class="headerlink" title="源码管理"></a>源码管理</h4><p>选择 Git 将 Gitlab 的项目路径和密钥信息填写好，并制定部署的分支信息。</p>
+<h4 id="构建触发器"><a href="#构建触发器" class="headerlink" title="构建触发器"></a>构建触发器</h4><p>触发器参考：<a href="http://blog.weixinote.com/2018/06/10/Gitlab-%E6%8F%90%E4%BA%A4%E4%BB%A3%E7%A0%81%E8%A7%A6%E5%8F%91-Jenkins-%E9%83%A8%E7%BD%B2/" target="_blank" rel="noopener">Gitlab-提交代码触发-Jenkins-部署</a></p>
+<h4 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h4><p>构建部署只要的作用可以是构建源码的二进制程序，发送到目标服务器，并在目标服务器运行起来程序。构建和运行程序可以直接将 shell 写在Jenkins或写在部署服务器的文件中，然后运行这个文件。或者通过 Ansible 来管理这些文件。</p>
+<p><strong>使用 Ansible</strong></p>
+<p>在<code>增加构建步骤</code> 选择 <code>Invoke Ansible Playbook</code> 选项，然后配置 playbook 文件的路径。</p>
+<p><img src="http://pa1so03xn.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-21%20%E4%B8%8B%E5%8D%884.45.47.png" alt="屏幕快照 2018-09-21 下午4.45.47"></p>
+<p>注：构建步骤也支持多个部署，同时执行 Shell 和 Ansible，按照配置的顺序执行。</p>
+<h3 id="Ansible-编写配置"><a href="#Ansible-编写配置" class="headerlink" title="Ansible 编写配置"></a>Ansible 编写配置</h3><p>我习惯将项目相关的配置文件统一放在 <code>/data/devops/projectname</code> 目录下。</p>
+<p>模版</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">- name:</span> <span class="string">handlers</span> <span class="string">projectname</span></span><br><span class="line"><span class="attr">  hosts:</span> <span class="string">dev</span></span><br><span class="line"><span class="attr">  user:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">  tasks:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">Creates</span> <span class="string">directory</span></span><br><span class="line"><span class="attr">      file:</span> <span class="string">path=/data/website/project/</span> <span class="string">state=directory</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">Creates</span> <span class="string">directory</span> <span class="string">config</span></span><br><span class="line"><span class="attr">      file:</span> <span class="string">path=/data/website/project/config/</span> <span class="string">state=directory</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">Creates</span> <span class="string">directory</span> <span class="string">log</span></span><br><span class="line"><span class="attr">      file:</span> <span class="string">path=/data/logs/project/</span> <span class="string">state=directory</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">copy</span> <span class="string">app</span></span><br><span class="line"><span class="attr">      copy:</span> <span class="string">src=/data/go/src/project/projectname</span> <span class="string">dest=/data/website/project/</span> <span class="string">owner=root</span> <span class="string">group=root</span> <span class="string">mode=0755</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">copy</span> <span class="string">config</span></span><br><span class="line"><span class="attr">      copy:</span> <span class="string">src=/data/devops/project/config.dev.ini</span> <span class="string">dest=/data/website/project/config/config.ini</span> <span class="string">owner=root</span> <span class="string">group=root</span> <span class="string">mode=0644</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">copy</span> <span class="string">supervisor</span> <span class="string">config</span></span><br><span class="line"><span class="attr">      copy:</span> <span class="string">src=/data/devops/project/supervisor.ini</span> <span class="string">dest=/etc/supervisord.d/supervisor_project.ini</span> <span class="string">owner=root</span> <span class="string">group=root</span> <span class="string">mode=0644</span></span><br><span class="line"><span class="attr">      notify:</span> <span class="string">reread</span> <span class="string">config</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">copy</span> <span class="string">run</span></span><br><span class="line"><span class="attr">      copy:</span> <span class="string">src=/data/devops/project/run.sh</span> <span class="string">dest=/data/init_start/project.sh</span> <span class="string">owner=root</span> <span class="string">group=root</span> <span class="string">mode=0755</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">copy</span> <span class="string">supervisor</span> <span class="string">sh</span></span><br><span class="line"><span class="attr">      copy:</span> <span class="string">src=/data/devops/project/supervisor.sh</span> <span class="string">dest=/data/sh/supervisor_project.sh</span> <span class="string">owner=root</span> <span class="string">group=root</span> <span class="string">mode=0755</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">restart</span> <span class="string">app</span></span><br><span class="line"><span class="attr">      supervisorctl:</span> <span class="string">name=project</span> <span class="string">state=restarted</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">copy</span> <span class="string">lograte</span></span><br><span class="line"><span class="attr">      copy:</span> <span class="string">src=/data/devops/project/logratate</span> <span class="string">dest=/etc/logrotate.d/project</span> <span class="string">owner=root</span> <span class="string">group=root</span> <span class="string">mode=0644</span></span><br><span class="line"><span class="attr">      notify:</span> <span class="string">run</span> <span class="string">lograte</span></span><br><span class="line"><span class="attr">  handlers:</span></span><br><span class="line"><span class="attr">    - name:</span> <span class="string">run</span> <span class="string">lograte</span></span><br><span class="line"><span class="attr">      shell:</span> <span class="string">logrotate</span> <span class="bullet">-f</span> <span class="string">/etc/logrotate.d/project</span></span><br></pre></td></tr></table></figure>
+<p>一个项目包含的配置文件：</p>
+<ul>
+<li>supervisor.ini supervisor 的配置文件</li>
+<li>supervisor.sh supervisor 重启</li>
+<li>lograte 日志切割的配置文件</li>
+</ul>
+<h3 id="Supervisor-配置"><a href="#Supervisor-配置" class="headerlink" title="Supervisor 配置"></a>Supervisor 配置</h3><p><a href="http://blog.weixinote.com/2018/09/24/Devops-%E5%BA%94%E7%94%A8%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7-supervisord/" target="_blank" rel="noopener">[Linux] 应用进程管理工具 supervisord</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Devops/" rel="tag"># Devops</a>
+          
+            <a href="/tags/supervisor/" rel="tag"># supervisor</a>
+          
+            <a href="/tags/gitlab/" rel="tag"># gitlab</a>
+          
+            <a href="/tags/jenkins/" rel="tag"># jenkins</a>
+          
+            <a href="/tags/ansible/" rel="tag"># ansible</a>
+          
+            <a href="/tags/go/" rel="tag"># go</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/24/Devops-应用进程管理工具-supervisord/" rel="next" title="[Devops] 应用进程管理工具 supervisord">
+                <i class="fa fa-chevron-left"></i> [Devops] 应用进程管理工具 supervisord
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/24/Mac-Mac-常用软件笔记/" rel="prev" title="[Mac] Mac 常用软件笔记">
+                [Mac] Mac 常用软件笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Leon Xu</p>
+              <p class="site-description motion-element" itemprop="description">专注于后端开发，Golang，Docker，Ruby</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#GitLab-安装"><span class="nav-number">1.</span> <span class="nav-text">GitLab 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitLab-CI-CD"><span class="nav-number">2.</span> <span class="nav-text">GitLab CI/CD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitLab-通知-Jenkins-部署"><span class="nav-number">3.</span> <span class="nav-text">GitLab 通知 Jenkins 部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Jenkins-安装-GitLab、Ansible-插件"><span class="nav-number">4.</span> <span class="nav-text">Jenkins 安装 GitLab、Ansible 插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Jenkins-创建部署项目"><span class="nav-number">5.</span> <span class="nav-text">Jenkins 创建部署项目</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置项目的功能工作路径-workspace"><span class="nav-number">5.1.</span> <span class="nav-text">配置项目的功能工作路径(workspace)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#源码管理"><span class="nav-number">5.2.</span> <span class="nav-text">源码管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#构建触发器"><span class="nav-number">5.3.</span> <span class="nav-text">构建触发器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#构建"><span class="nav-number">5.4.</span> <span class="nav-text">构建</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ansible-编写配置"><span class="nav-number">6.</span> <span class="nav-text">Ansible 编写配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Supervisor-配置"><span class="nav-number">7.</span> <span class="nav-text">Supervisor 配置</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Leon Xu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://blog-weixinote-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://weixinote.com/2018/09/24/Devops-基于-Gitlab-Jenkins-Ansible-Supervisor实现Go项目自动化部署/';
+          this.page.identifier = '2018/09/24/Devops-基于-Gitlab-Jenkins-Ansible-Supervisor实现Go项目自动化部署/';
+          this.page.title = '[Devops] 基于 Gitlab+Jenkins+Ansible+Supervisor实现Go项目自动化部署';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://blog-weixinote-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

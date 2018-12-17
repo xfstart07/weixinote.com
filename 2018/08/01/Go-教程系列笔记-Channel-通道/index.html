@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Go,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在上一个教程中，我们讨论了如何使用 goroutine 在 Go 中实现并发。在本教程中，我们将讨论有关通道以及 goroutine 如何使用通道进行通信。 什么是通道？通道可以被认为是 goroutine 通信的通道。类似于水在管道中从一端流向另一端的方式，数据可以从一端发送，另一端使用通道接收。">
+<meta name="keywords" content="Go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Go 教程系列笔记] Channel 通道">
+<meta property="og:url" content="https://weixinote.com/2018/08/01/Go-教程系列笔记-Channel-通道/index.html">
+<meta property="og:site_name" content="维系笔记">
+<meta property="og:description" content="在上一个教程中，我们讨论了如何使用 goroutine 在 Go 中实现并发。在本教程中，我们将讨论有关通道以及 goroutine 如何使用通道进行通信。 什么是通道？通道可以被认为是 goroutine 通信的通道。类似于水在管道中从一端流向另一端的方式，数据可以从一端发送，另一端使用通道接收。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-17T08:51:23.788Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[Go 教程系列笔记] Channel 通道">
+<meta name="twitter:description" content="在上一个教程中，我们讨论了如何使用 goroutine 在 Go 中实现并发。在本教程中，我们将讨论有关通道以及 goroutine 如何使用通道进行通信。 什么是通道？通道可以被认为是 goroutine 通信的通道。类似于水在管道中从一端流向另一端的方式，数据可以从一端发送，另一端使用通道接收。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://weixinote.com/2018/08/01/Go-教程系列笔记-Channel-通道/">
+
+
+
+
+
+  <title>[Go 教程系列笔记] Channel 通道 | 维系笔记</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-123195177-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">维系笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">连接过去、现在、未来</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://weixinote.com/2018/08/01/Go-教程系列笔记-Channel-通道/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leon Xu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="维系笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">[Go 教程系列笔记] Channel 通道</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T15:09:45+08:00">
+                2018-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index">
+                    <span itemprop="name">Go</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/01/Go-教程系列笔记-Channel-通道/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/08/01/Go-教程系列笔记-Channel-通道/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在上一个教程中，我们讨论了如何使用 goroutine 在 Go 中实现并发。在本教程中，我们将讨论有关通道以及 goroutine 如何使用通道进行通信。</p>
+<h3 id="什么是通道？"><a href="#什么是通道？" class="headerlink" title="什么是通道？"></a>什么是通道？</h3><p>通道可以被认为是 goroutine 通信的通道。类似于水在管道中从一端流向另一端的方式，数据可以从一端发送，另一端使用通道接收。</p>
+<a id="more"></a>
+<h3 id="声明通道"><a href="#声明通道" class="headerlink" title="声明通道"></a>声明通道</h3><p>每个通道都有一个与之关联的类型。此类型是允许通道传输的数据类型。不允许使用该通道传输其他类型。</p>
+<p><code>chan T</code> 是一种类型为 T 的通道。</p>
+<p>通道的零值是 <code>nil</code>。<code>nil</code> 通道是没有任何用处，因此必须使用 <code>make</code> 类似于 <code>map</code> 和 <code>slice</code> 来定义通道。</p>
+<p>让我们写一些声明通道的代码。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> a <span class="keyword">chan</span> <span class="keyword">int</span></span><br><span class="line">    <span class="keyword">if</span> a == <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Println(<span class="string">"channel a is nil, going to define it"</span>)</span><br><span class="line">        a = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">        fmt.Printf(<span class="string">"Type of a is %T"</span>, a)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>play: <a href="https://play.golang.org/p/oqrK1vDYCsz" target="_blank" rel="noopener">https://play.golang.org/p/oqrK1vDYCsz</a></p>
+<p><code>var a chan int</code> 声明了一个通道，这时通道是零值(nil)的。在 if 条件内的语句定义了通道，这时通道的值是 int 的零值(0)。</p>
+<p>像往常一样，简写声明也是定义通道的有效而简洁的方法。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="从通道发送和接收"><a href="#从通道发送和接收" class="headerlink" title="从通道发送和接收"></a>从通道发送和接收</h3><p>下面给出了从通道发送和接收数据的语法。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">data := &lt;- a <span class="comment">// read from channel a</span></span><br><span class="line">a &lt;- data <span class="comment">// write to channel a</span></span><br></pre></td></tr></table></figure>
+<p>箭头相对于通道的方向指定是发送或接收数据。</p>
+<p>第一行中，箭头从 <code>a</code> 指出来，因此我们从通道 <code>a</code> 读取值并存储到变量 <code>data</code> 中。</p>
+<p>第二行中，箭头指向 <code>a</code>，因此我们是写入到通道 <code>a</code>。</p>
+<h3 id="默认情况下，发送和接收是阻塞的"><a href="#默认情况下，发送和接收是阻塞的" class="headerlink" title="默认情况下，发送和接收是阻塞的"></a>默认情况下，发送和接收是阻塞的</h3><p>默认情况下，对通道的发送和接收是阻塞的，这是什么意思？当数据发送到通道时，发送语句被阻塞着，直到其他 goroutine 从该通道读取。类似地，当从通道读取数据时，读取被阻塞，直到一些 goroutine 将数据写入到该通道。</p>
+<p>通道的这种属性有助于 goroutine 有效地进行通信，而无需使用在其他编程语言中非常常见的显式锁或条件变量。</p>
+<h3 id="通道示例程序"><a href="#通道示例程序" class="headerlink" title="通道示例程序"></a>通道示例程序</h3><p>在上一个教程介绍 goroutine 的程序中，我们使用 Sheep 方法让主程序休眠来等待 <code>go hello()</code> 的完成，下面我们来用通道重写这个程序。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">hello</span><span class="params">(done <span class="keyword">chan</span> <span class="keyword">bool</span>)</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"hello world goroutine"</span>)</span><br><span class="line">	done &lt;- <span class="literal">true</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	done := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">bool</span>)</span><br><span class="line">	<span class="keyword">go</span> hello(done)</span><br><span class="line">	&lt;-done</span><br><span class="line">	fmt.Println(<span class="string">"main function"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的程序中，我们创建了一个布尔值通道 <code>done</code>，并将它作为参数传给 <code>go hello(done)</code>。然后主程序从 <code>&lt;-done</code> 通道接收数据，这行代码是阻塞的，这意味着 goroutine 将数据写入 <code>done</code> 通道之前，代码不会移动到下一行。这样就防止了主程序 goroutine 退出。</p>
+<p>代码 <code>&lt;-done</code> 从完成的 goroutine 接收数据，但不赋值给任何变量中使用或存储该数据。这是完全合法的。</p>
+<h3 id="Deadlock-死锁"><a href="#Deadlock-死锁" class="headerlink" title="Deadlock 死锁"></a>Deadlock 死锁</h3><p>使用通道时要考虑的一个重要因素是<strong>死锁</strong>。如果 goroutine 正在通道上发送数据，那么预计其他一些 goroutine 应该接收数据。如果没有发生这种情况，程序将在运行时发生混乱。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">    ch &lt;- <span class="number">5</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的程序中， <code>ch</code> 创建了一个通道，我们将其发送 5 到该通道 <code>ch &lt;- 5</code>。在这个程序中，没有其他 goroutine 从通道接收<code>ch</code>的数据。因此，从程序在运行时将出现以下错误：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fatal error: all goroutines are asleep - deadlock!</span><br><span class="line"></span><br><span class="line">goroutine 1 [chan send]:</span><br><span class="line">main.main()</span><br><span class="line">    /tmp/sandbox249677995/main.go:6 +0x80</span><br></pre></td></tr></table></figure>
+<h3 id="单向通道"><a href="#单向通道" class="headerlink" title="单向通道"></a>单向通道</h3><p>到目前为止我们讨论的所有通信都是双向通道，即数据可以在它们上发送和接收。也可以创建单向通道，即仅发送或接收数据的通道。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sendData</span><span class="params">(sendch <span class="keyword">chan</span>&lt;- <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    sendch &lt;- <span class="number">10</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    sendch := <span class="built_in">make</span>(<span class="keyword">chan</span>&lt;- <span class="keyword">int</span>)</span><br><span class="line">    <span class="keyword">go</span> sendData(sendch)</span><br><span class="line">    fmt.Println(&lt;-sendch)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的程序中，主程序的第一行创建了仅发送的通道。<code>chan&lt;- int</code> 表示箭头指向的仅发送通道。我们尝试在仅发送通道接收数据是不允许的。当程序运行时，编译器会报错。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">invalid operation: &lt;-sendch (receive from send-only type chan&lt;- int)</span><br></pre></td></tr></table></figure>
+<p>因为我们定义的通道是只能发送，那么就不能接收数据。可以将双向通道转换为仅发送或仅接收通道。</p>
+<p>修改为正确的代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sendData</span><span class="params">(sendch <span class="keyword">chan</span>&lt;- <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    sendch &lt;- <span class="number">10</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    chnl := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">    <span class="keyword">go</span> sendData(chnl)</span><br><span class="line">    fmt.Println(&lt;-chnl)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="关闭通道和-for-range-通道"><a href="#关闭通道和-for-range-通道" class="headerlink" title="关闭通道和 for range 通道"></a>关闭通道和 for range 通道</h3><p>发送人能够关闭通道以通知接收者不再在该通道上发送数据。</p>
+<p>接收器可以在从通道接收数据时使用附加变量来检查通道是否已经关闭。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v, ok := &lt;-ch</span><br></pre></td></tr></table></figure>
+<p>如果 <code>ok</code>是 true，则表示成功从通道的发送操作接收到值。如果 <code>ok</code>是 false，则意味着我们正在从关闭的通道读取，从关闭通道读取的值是通道类型的零值。</p>
+<p>play：<a href="https://play.golang.org/p/XWmUKDA2Ri" target="_blank" rel="noopener">https://play.golang.org/p/XWmUKDA2Ri</a></p>
+<p><code>for range</code> 语法亦可用于从通道接收值，直到它关闭。</p>
+<p>让我们使用 <code>for range</code> 重写上面的程序。</p>
+<p>play：<a href="https://play.golang.org/p/JJ3Ida1r_6" target="_blank" rel="noopener">https://play.golang.org/p/JJ3Ida1r_6</a></p>
+<p>重写上一个教程中计算数字的例子：</p>
+<p>play：<a href="https://play.golang.org/p/oL86W9Ui03" target="_blank" rel="noopener">https://play.golang.org/p/oL86W9Ui03</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Go/" rel="tag"># Go</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/31/Go-教程系列笔记-goroutine（协程）/" rel="next" title="[Go 教程系列笔记] goroutine（协程）">
+                <i class="fa fa-chevron-left"></i> [Go 教程系列笔记] goroutine（协程）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/01/Go-教程系列笔记-缓冲通道和工作池/" rel="prev" title="[Go 教程系列笔记] 缓冲通道和工作池">
+                [Go 教程系列笔记] 缓冲通道和工作池 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Leon Xu</p>
+              <p class="site-description motion-element" itemprop="description">专注于后端开发，Golang，Docker，Ruby</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是通道？"><span class="nav-number">1.</span> <span class="nav-text">什么是通道？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#声明通道"><span class="nav-number">2.</span> <span class="nav-text">声明通道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从通道发送和接收"><span class="nav-number">3.</span> <span class="nav-text">从通道发送和接收</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#默认情况下，发送和接收是阻塞的"><span class="nav-number">4.</span> <span class="nav-text">默认情况下，发送和接收是阻塞的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通道示例程序"><span class="nav-number">5.</span> <span class="nav-text">通道示例程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deadlock-死锁"><span class="nav-number">6.</span> <span class="nav-text">Deadlock 死锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单向通道"><span class="nav-number">7.</span> <span class="nav-text">单向通道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关闭通道和-for-range-通道"><span class="nav-number">8.</span> <span class="nav-text">关闭通道和 for range 通道</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Leon Xu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://blog-weixinote-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://weixinote.com/2018/08/01/Go-教程系列笔记-Channel-通道/';
+          this.page.identifier = '2018/08/01/Go-教程系列笔记-Channel-通道/';
+          this.page.title = '[Go 教程系列笔记] Channel 通道';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://blog-weixinote-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Go,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Go 是一种并发语言，而不是并行语言。在讨论如何在Go中处理并发之前，我们必须首先了解什么是并发以及它和并行性的区别。 什么是并发？并发是一次处理大量事情的能力。举个例子： 让我们假设一个人慢跑。在他早晨慢跑时，他的鞋带解开了。现在这个人停止跑步，把鞋带帮好，然后又开始跑步。这就是并发的典型示例。这个人能够处理跑步和绑鞋带，也就是说，这个人能够同时处理很多事情。">
+<meta name="keywords" content="Go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Go 教程系列笔记] 并发介绍">
+<meta property="og:url" content="https://weixinote.com/2018/07/31/Go-教程系列笔记-并发介绍/index.html">
+<meta property="og:site_name" content="维系笔记">
+<meta property="og:description" content="Go 是一种并发语言，而不是并行语言。在讨论如何在Go中处理并发之前，我们必须首先了解什么是并发以及它和并行性的区别。 什么是并发？并发是一次处理大量事情的能力。举个例子： 让我们假设一个人慢跑。在他早晨慢跑时，他的鞋带解开了。现在这个人停止跑步，把鞋带帮好，然后又开始跑步。这就是并发的典型示例。这个人能够处理跑步和绑鞋带，也就是说，这个人能够同时处理很多事情。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://pa1so03xn.bkt.clouddn.com/15326597209062.jpg">
+<meta property="og:image" content="http://pa1so03xn.bkt.clouddn.com/15326598785575.jpg">
+<meta property="og:updated_time" content="2018-12-17T08:51:23.795Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[Go 教程系列笔记] 并发介绍">
+<meta name="twitter:description" content="Go 是一种并发语言，而不是并行语言。在讨论如何在Go中处理并发之前，我们必须首先了解什么是并发以及它和并行性的区别。 什么是并发？并发是一次处理大量事情的能力。举个例子： 让我们假设一个人慢跑。在他早晨慢跑时，他的鞋带解开了。现在这个人停止跑步，把鞋带帮好，然后又开始跑步。这就是并发的典型示例。这个人能够处理跑步和绑鞋带，也就是说，这个人能够同时处理很多事情。">
+<meta name="twitter:image" content="http://pa1so03xn.bkt.clouddn.com/15326597209062.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://weixinote.com/2018/07/31/Go-教程系列笔记-并发介绍/">
+
+
+
+
+
+  <title>[Go 教程系列笔记] 并发介绍 | 维系笔记</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-123195177-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">维系笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">连接过去、现在、未来</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://weixinote.com/2018/07/31/Go-教程系列笔记-并发介绍/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leon Xu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="维系笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">[Go 教程系列笔记] 并发介绍</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-31T13:46:04+08:00">
+                2018-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index">
+                    <span itemprop="name">Go</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/31/Go-教程系列笔记-并发介绍/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/31/Go-教程系列笔记-并发介绍/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Go 是一种并发语言，而不是并行语言。在讨论如何在Go中处理并发之前，我们必须首先了解什么是并发以及它和并行性的区别。</p>
+<h3 id="什么是并发？"><a href="#什么是并发？" class="headerlink" title="什么是并发？"></a>什么是并发？</h3><p>并发是一次处理大量事情的能力。举个例子：</p>
+<p>让我们假设一个人慢跑。在他早晨慢跑时，他的鞋带解开了。现在这个人停止跑步，把鞋带帮好，然后又开始跑步。这就是并发的典型示例。这个人能够处理跑步和绑鞋带，也就是说，这个人能够同时处理很多事情。</p>
+<a id="more"></a>
+<h3 id="什么是并行性，它和并发性有什么不同？"><a href="#什么是并行性，它和并发性有什么不同？" class="headerlink" title="什么是并行性，它和并发性有什么不同？"></a>什么是并行性，它和并发性有什么不同？</h3><p>并行性是同时做了很多事情。它可能听起来类似于并发，但它实际上是不同的。</p>
+<p>让我们还是用同样的慢跑例子来更好地理解它。在这种情况下，我们假设这个人正在慢跑并且用iphone听音乐。在这种情况下，这个人正在慢跑并同时听音乐，也就是说，他正在做很多事情。这称为并行性。</p>
+<h3 id="并发与并行-一种技术观点"><a href="#并发与并行-一种技术观点" class="headerlink" title="并发与并行 - 一种技术观点"></a>并发与并行 - 一种技术观点</h3><p>我们刚刚理解了什么是并发性以及它与真实世界示例的并行性有何不同。现在让我们从更技术的角度来看待它们，因为我们是极客嘛:)</p>
+<p>假设我们正在编写一个 Web 浏览器。Web 浏览器具有各种组件。其中两个是网页显示和用于从互联网下载文件的下载程序。让我们假设我们已经构建好了我们的浏览器代码，使得每个组件都可以独立执行（这是使用Java等语言中的线程完成的，我们可以使用 Goroutine 实现这一点，稍后会详细介绍）。当此浏览器在单核处理器中运行时，处理器将在浏览器的两个组件之间进行上下文切换。它可能正在下载文件一段时间，然后它可能会切换到呈现用户请求的网页的HTML。这被称为并发。并发进程在不同的时间点开始，并且它们的执行周期重叠。在这种情况下，下载和渲染在不同的时间点开始，并且它们的执行重叠。</p>
+<p>让我们假设同一个浏览器在多核处理器上运行。在这种情况下，文件下载组件和HTML呈现组件可以在不同的CPU中同时运行。这被称为并行。</p>
+<p><img src="http://pa1so03xn.bkt.clouddn.com/15326597209062.jpg" alt=""></p>
+<p><img src="http://pa1so03xn.bkt.clouddn.com/15326598785575.jpg" alt=""></p>
+<p>并行性并不总是会导致更快的执行时间。这是因为并行运行的组件可能必须相互通信。例如，在我们的浏览器的情况下，当文件下载完成时，应该将其传达给用户，例如使用弹窗，此通信发送在负责下载组件和负责呈现用户界面的组件之间。并发系统中的通信开销很低。组件在多核中并行运行的情况下，这种通信开销很高。因此，并行程序并不总是会导致更快的执行时间。</p>
+<p><strong>注：程序在多核中如何通信，开销如何？</strong></p>
+<h3 id="在-Go-中支持并发性"><a href="#在-Go-中支持并发性" class="headerlink" title="在 Go 中支持并发性"></a>在 Go 中支持并发性</h3><p>并发是 Go 语言的一部分。使用 goroutine 和 channel 在 Go 中处理并发。我们将在接下来的教程中详细讨论它们。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Go/" rel="tag"># Go</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/26/Go-教程系列笔记-Interface-第二部分/" rel="next" title="[Go 教程系列笔记]Interface 第二部分">
+                <i class="fa fa-chevron-left"></i> [Go 教程系列笔记]Interface 第二部分
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/31/Go-教程系列笔记-goroutine（协程）/" rel="prev" title="[Go 教程系列笔记] goroutine（协程）">
+                [Go 教程系列笔记] goroutine（协程） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Leon Xu</p>
+              <p class="site-description motion-element" itemprop="description">专注于后端开发，Golang，Docker，Ruby</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是并发？"><span class="nav-number">1.</span> <span class="nav-text">什么是并发？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是并行性，它和并发性有什么不同？"><span class="nav-number">2.</span> <span class="nav-text">什么是并行性，它和并发性有什么不同？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并发与并行-一种技术观点"><span class="nav-number">3.</span> <span class="nav-text">并发与并行 - 一种技术观点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在-Go-中支持并发性"><span class="nav-number">4.</span> <span class="nav-text">在 Go 中支持并发性</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Leon Xu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://blog-weixinote-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://weixinote.com/2018/07/31/Go-教程系列笔记-并发介绍/';
+          this.page.identifier = '2018/07/31/Go-教程系列笔记-并发介绍/';
+          this.page.title = '[Go 教程系列笔记] 并发介绍';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://blog-weixinote-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

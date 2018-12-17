@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Go,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在上一章中，我们讨论了并发性以及它与并行性的不同之处。在本章中，我们将讨论如何使用 goroutine 在 Go中实现并发。 什么是 goroutine？goroutine 可以被认为是轻量级线程。与线程相比，创建 goroutine 的成本很小。因此，Go 应用程序通常会同时运行数千个 goroutine。 goroutine 也被称为协程，协程的函数或方法与其他函数或方法是同时运行。">
+<meta name="keywords" content="Go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Go 教程系列笔记] goroutine（协程）">
+<meta property="og:url" content="https://weixinote.com/2018/07/31/Go-教程系列笔记-goroutine（协程）/index.html">
+<meta property="og:site_name" content="维系笔记">
+<meta property="og:description" content="在上一章中，我们讨论了并发性以及它与并行性的不同之处。在本章中，我们将讨论如何使用 goroutine 在 Go中实现并发。 什么是 goroutine？goroutine 可以被认为是轻量级线程。与线程相比，创建 goroutine 的成本很小。因此，Go 应用程序通常会同时运行数千个 goroutine。 goroutine 也被称为协程，协程的函数或方法与其他函数或方法是同时运行。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://pa1so03xn.bkt.clouddn.com/Goroutines-explained.png">
+<meta property="og:image" content="http://pa1so03xn.bkt.clouddn.com/15326620055027.jpg">
+<meta property="og:updated_time" content="2018-12-17T08:51:23.790Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[Go 教程系列笔记] goroutine（协程）">
+<meta name="twitter:description" content="在上一章中，我们讨论了并发性以及它与并行性的不同之处。在本章中，我们将讨论如何使用 goroutine 在 Go中实现并发。 什么是 goroutine？goroutine 可以被认为是轻量级线程。与线程相比，创建 goroutine 的成本很小。因此，Go 应用程序通常会同时运行数千个 goroutine。 goroutine 也被称为协程，协程的函数或方法与其他函数或方法是同时运行。">
+<meta name="twitter:image" content="http://pa1so03xn.bkt.clouddn.com/Goroutines-explained.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://weixinote.com/2018/07/31/Go-教程系列笔记-goroutine（协程）/">
+
+
+
+
+
+  <title>[Go 教程系列笔记] goroutine（协程） | 维系笔记</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-123195177-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">维系笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">连接过去、现在、未来</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://weixinote.com/2018/07/31/Go-教程系列笔记-goroutine（协程）/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leon Xu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="维系笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">[Go 教程系列笔记] goroutine（协程）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-31T13:49:02+08:00">
+                2018-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index">
+                    <span itemprop="name">Go</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/07/31/Go-教程系列笔记-goroutine（协程）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/31/Go-教程系列笔记-goroutine（协程）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在上一章中，我们讨论了并发性以及它与并行性的不同之处。在本章中，我们将讨论如何使用 goroutine 在 Go中实现并发。</p>
+<h3 id="什么是-goroutine？"><a href="#什么是-goroutine？" class="headerlink" title="什么是 goroutine？"></a>什么是 goroutine？</h3><p>goroutine 可以被认为是轻量级线程。与线程相比，创建 goroutine 的成本很小。因此，Go 应用程序通常会同时运行数千个 goroutine。</p>
+<p>goroutine 也被称为<strong>协程</strong>，协程的函数或方法与其他函数或方法是同时运行。</p>
+<a id="more"></a>
+<h3 id="goroutine-优于线程的优点"><a href="#goroutine-优于线程的优点" class="headerlink" title="goroutine 优于线程的优点"></a>goroutine 优于线程的优点</h3><ul>
+<li>与线程相比，goroutine 非常便宜，它们的堆栈大小只有几KB，堆栈可能根据应用程序的需要增长和缩小，而在线程的情况下，堆栈大小必须指定并且固定的。</li>
+<li>goroutine 被多路复用到较少数量的 OS(系统) 线程。程序中可能只有一个线程但有数千个 goroutine。如果该线程中的任何 goroutine 阻塞了，则会创建另一个 OS 线程，并将剩余的 goroutine 移动到新的 OS 线程。所有这些都由运行时（runtime）处理，我们作为程序员从这些复杂的细节中抽象出来，并给出一个干净的 API 来处理并发。</li>
+<li>goroutine 使用 Channel 进行通信。设计 Channel 可以防止 goroutine 访问共享内存时发生竞争。Channel 可以被认为是 goroutine 通信的管道。我们将在下一个教程中详细讨论 Channel。</li>
+</ul>
+<h3 id="如何使用-goroutine？"><a href="#如何使用-goroutine？" class="headerlink" title="如何使用 goroutine？"></a>如何使用 goroutine？</h3><p>使用关键字为函数或方法调用添加前缀 <code>go</code>，将同时运行新的 goroutine.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">func hello() &#123;</span><br><span class="line">    fmt.Println(&quot;Hello world goroutine&quot;)</span><br><span class="line">&#125;</span><br><span class="line">func main() &#123;</span><br><span class="line">    go hello()</span><br><span class="line">    fmt.Println(&quot;main function&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面 <code>go hello()</code> 创建了新的 goroutine，现在 <code>hello()</code> 函数将与 <code>main()</code> 函数同时运行。<code>main()</code> 也是用一个 goroutine 运行的，称为 <code>main goroutine</code>.</p>
+<p>但是上面代码的运行中，只输出了 <code>main function</code> 文本。为什么 <code>hello()</code> goroutine 没有运行呢？我们需要了解 go 程序的两个主要特性，以了解为什么会发生这种情况。</p>
+<ul>
+<li>当一个新的 goroutine 启动时，goroutine 启动后立即返回，与函数不同，程序不会等 goroutine 执行完成。在 goroutine 调用之后，程序会立即返回到下一行代码，并忽略 goroutine 的任何返回值。</li>
+<li>main goroutine 会运行任何其他 goroutine，如果 main goroutine 终止，则该程序将被终止，并且其他 goroutine 将不会运行。</li>
+</ul>
+<p>现在我们理解为什么 <code>hello()</code> 没有执行了，在调用了 <code>go hello()</code> 之后，程序没有等待 <code>hello()</code> 执行完，而是接着执行打印 <code>main function</code>，然后 main goroutine 终止，因此 <code>hello()</code> 的 goroutine 没有机会执行。</p>
+<p>让我们现在来解决这个问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">func hello() &#123;</span><br><span class="line">    fmt.Println(&quot;Hello world goroutine&quot;)</span><br><span class="line">&#125;</span><br><span class="line">func main() &#123;</span><br><span class="line">    go hello()</span><br><span class="line">    time.Sleep(1 * time.Second)</span><br><span class="line">    fmt.Println(&quot;main function&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面我们调用了 time 包的 Sleep 方法，这个方法是让正在执行它的 goroutine 睡眠，在这种情况下，<code>main goroutine</code> 进入睡眠状态1秒钟。现在在主程序终止之前有足够的时间执行了，<code>hello()</code> 打印了 <code>Hello world goroutine</code>，然后主程序等待1秒钟之后打印，程序终止。</p>
+<blockquote>
+<p>这种在主程序中使用 Sleep 等待其他 goroutine 执行完成的方式是我们用来理解 goroutine 是如何工作的，这种方式是很 hack 的。channel 可用于阻塞主程序，直到其他goroutine 执行完成。</p>
+</blockquote>
+<h3 id="启动多个-goroutine"><a href="#启动多个-goroutine" class="headerlink" title="启动多个 goroutine"></a>启动多个 goroutine</h3><p>让我们再写一个程序，启动多个 goroutine 以更好地理解 goroutine。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">func numbers() &#123;</span><br><span class="line">    for i := 1; i &lt;= 5; i++ &#123;</span><br><span class="line">        time.Sleep(250 * time.Millisecond)</span><br><span class="line">        fmt.Printf(&quot;%d &quot;, i)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">func alphabets() &#123;</span><br><span class="line">    for i := &apos;a&apos;; i &lt;= &apos;e&apos;; i++ &#123;</span><br><span class="line">        time.Sleep(400 * time.Millisecond)</span><br><span class="line">        fmt.Printf(&quot;%c &quot;, i)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">func main() &#123;</span><br><span class="line">    go numbers()</span><br><span class="line">    go alphabets()</span><br><span class="line">    time.Sleep(3000 * time.Millisecond)</span><br><span class="line">    fmt.Println(&quot;main terminated&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>play: <a href="https://play.golang.org/p/oltn5nw0w3" target="_blank" rel="noopener">https://play.golang.org/p/oltn5nw0w3</a></p>
+<p>上面的程序开始启用两个 goroutine 排队，两个 goroutine 同时运行。<code>numbers</code> 协程每休眠250毫秒打印 i，一直打印到 5. 类似的 <code>alphabets</code> 休眠 400 毫秒打印一个字符。主程序休眠 3000毫秒之后终止。</p>
+<p>下面描绘了该程序的工作原理：</p>
+<p><img src="http://pa1so03xn.bkt.clouddn.com/Goroutines-explained.png" alt="Goroutines-explained"></p>
+<p>每个框代表一个 goroutine 的运行时间。图像是自我解释的，你将能够理解程序的工作原理。</p>
+<p><strong>注：堆栈是什么？</strong></p>
+<blockquote>
+<p>维基：栈（英语：stack）又称为栈或堆叠，是计算机科学中一种特殊的串列形式的抽象数据类型，其特殊之处在于只能允许在链表或数组的一端（称为堆栈顶端指针，英语：top）进行加入数据（英语：push）和输出数据（英语：pop）的运算。另外栈也可以用一维数组或链表的形式来完成。堆栈的另外一个相对的操作方式称为队列。</p>
+</blockquote>
+<p><strong>注：多路复用是什么意思？</strong></p>
+<blockquote>
+<p>维基：多路复用（Multiplexing，又称“多工”）是一个通信和计算机网络领域的专业术语，在没有歧义的情况下，“多路复用”也可被称为“复用”。多路复用通常表示在一个信道上传输多路信号或数据流的过程和技术。因为多路复用能够将多个低速信道整合到一个高速信道进行传输，从而有效地利用了高速信道。通过使用多路复用，通信运营商可以避免维护多条线路，从而有效地节约运营成本。</p>
+</blockquote>
+<p><img src="http://pa1so03xn.bkt.clouddn.com/15326620055027.jpg" alt=""></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Go/" rel="tag"># Go</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/31/Go-教程系列笔记-并发介绍/" rel="next" title="[Go 教程系列笔记] 并发介绍">
+                <i class="fa fa-chevron-left"></i> [Go 教程系列笔记] 并发介绍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/01/Go-教程系列笔记-Channel-通道/" rel="prev" title="[Go 教程系列笔记] Channel 通道">
+                [Go 教程系列笔记] Channel 通道 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Leon Xu</p>
+              <p class="site-description motion-element" itemprop="description">专注于后端开发，Golang，Docker，Ruby</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是-goroutine？"><span class="nav-number">1.</span> <span class="nav-text">什么是 goroutine？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#goroutine-优于线程的优点"><span class="nav-number">2.</span> <span class="nav-text">goroutine 优于线程的优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何使用-goroutine？"><span class="nav-number">3.</span> <span class="nav-text">如何使用 goroutine？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动多个-goroutine"><span class="nav-number">4.</span> <span class="nav-text">启动多个 goroutine</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Leon Xu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://blog-weixinote-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://weixinote.com/2018/07/31/Go-教程系列笔记-goroutine（协程）/';
+          this.page.identifier = '2018/07/31/Go-教程系列笔记-goroutine（协程）/';
+          this.page.title = '[Go 教程系列笔记] goroutine（协程）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://blog-weixinote-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

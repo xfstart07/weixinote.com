@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Go,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="操作系统调度器执行指令程序计数器(PC)，有时称为指令指针(IP)，线程利用它来跟踪下一个要执行的指令。在大多数处理器中，PC指向的是下一条指令，而不是当前指令。 线程状态 等待中(Waiting):这意味着线程停止并等待某件事情以继续。这可能是因为等待硬件(磁盘、网络)、操作系统(系统调用)或同步调用(原子、互斥)等原因。这些类型的延迟是性能下降的根本原因。 待执行(Runnable):这意味着">
+<meta name="keywords" content="Go">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[笔记] Go 调度器">
+<meta property="og:url" content="https://weixinote.com/2018/10/10/笔记-Go-调度器/index.html">
+<meta property="og:site_name" content="维系笔记">
+<meta property="og:description" content="操作系统调度器执行指令程序计数器(PC)，有时称为指令指针(IP)，线程利用它来跟踪下一个要执行的指令。在大多数处理器中，PC指向的是下一条指令，而不是当前指令。 线程状态 等待中(Waiting):这意味着线程停止并等待某件事情以继续。这可能是因为等待硬件(磁盘、网络)、操作系统(系统调用)或同步调用(原子、互斥)等原因。这些类型的延迟是性能下降的根本原因。 待执行(Runnable):这意味着">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://pa1so03xn.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-10-09%20%E4%B8%8B%E5%8D%884.54.50.png">
+<meta property="og:updated_time" content="2018-12-17T08:51:23.798Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[笔记] Go 调度器">
+<meta name="twitter:description" content="操作系统调度器执行指令程序计数器(PC)，有时称为指令指针(IP)，线程利用它来跟踪下一个要执行的指令。在大多数处理器中，PC指向的是下一条指令，而不是当前指令。 线程状态 等待中(Waiting):这意味着线程停止并等待某件事情以继续。这可能是因为等待硬件(磁盘、网络)、操作系统(系统调用)或同步调用(原子、互斥)等原因。这些类型的延迟是性能下降的根本原因。 待执行(Runnable):这意味着">
+<meta name="twitter:image" content="http://pa1so03xn.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-10-09%20%E4%B8%8B%E5%8D%884.54.50.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://weixinote.com/2018/10/10/笔记-Go-调度器/">
+
+
+
+
+
+  <title>[笔记] Go 调度器 | 维系笔记</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-123195177-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">维系笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">连接过去、现在、未来</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://weixinote.com/2018/10/10/笔记-Go-调度器/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leon Xu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="维系笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">[笔记] Go 调度器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-10T11:09:43+08:00">
+                2018-10-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index">
+                    <span itemprop="name">Go</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/10/10/笔记-Go-调度器/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/10/10/笔记-Go-调度器/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="操作系统调度器"><a href="#操作系统调度器" class="headerlink" title="操作系统调度器"></a>操作系统调度器</h2><h3 id="执行指令"><a href="#执行指令" class="headerlink" title="执行指令"></a>执行指令</h3><p>程序计数器(PC)，有时称为指令指针(IP)，线程利用它来跟踪下一个要执行的指令。在大多数处理器中，PC指向的是下一条指令，而不是当前指令。</p>
+<h3 id="线程状态"><a href="#线程状态" class="headerlink" title="线程状态"></a>线程状态</h3><ul>
+<li><code>等待中(Waiting)</code>:这意味着线程停止并等待某件事情以继续。这可能是因为等待硬件(磁盘、网络)、操作系统(系统调用)或同步调用(原子、互斥)等原因。这些类型的延迟是性能下降的根本原因。</li>
+<li><code>待执行(Runnable)</code>:这意味着线程需要内核上的时间，以便执行它指定的机器指令。如果有很多线程都需要时间，那么线程需要等待更长的时间才能获得执行。此外，由于更多的线程在竞争，每个线程获得的单个执行时间都会缩短。这种类型的调度延迟也可能导致性能下降。</li>
+<li><code>执行中(Executing)</code>:这意味着线程已经被放置在一个核心上，并且正在执行它的机器指令。与应用程序相关的工作正在完成。这是每个人都想要的。</li>
+</ul>
+<h3 id="工作类型"><a href="#工作类型" class="headerlink" title="工作类型"></a>工作类型</h3><ul>
+<li><code>CPU-Bound</code>：这种工作类型永远也不会让线程处在等待状态，因为这是一项不断进行计算的工作。比如计算 π 的第 n 位，就是一个 CPU-Bound 线程。</li>
+<li><code>IO-Bound</code>：这是导致线程进入等待状态的工作类型。比如通过网络请求对资源的访问或对操作系统进行系统调用。</li>
+</ul>
+<h3 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h3><p>在核心上交换线程的物理行为称为上下文切换。当调度器将一个正在执行的线程从内核中取出并将其更改状态为一个可运行的线程时，就会发生上下文切换。</p>
+<h3 id="寻找一个平衡"><a href="#寻找一个平衡" class="headerlink" title="寻找一个平衡"></a>寻找一个平衡</h3><p>你需要在 CPU 核心数和为应用程序获得最佳吞吐量所需的线程数之间找到平衡。当涉及到管理这种平衡时，线程池是一个很好的解决方案。</p>
+<h3 id="CPU-缓存"><a href="#CPU-缓存" class="headerlink" title="CPU 缓存"></a>CPU 缓存</h3><p>从主存访问数据有很高的延迟成本(大约 100 到 300 个时钟周期)，因此处理器核心使用本地高速缓存来将数据保存在需要的硬件线程附近。从缓存访问数据的成本要低得多(大约 3 到 40 个时钟周期)，这取决于所访问的缓存。</p>
+<p><img src="http://pa1so03xn.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-10-09%20%E4%B8%8B%E5%8D%884.54.50.png" alt="屏幕快照 2018-10-09 下午4.54.50"></p>
+<p><code>cache line</code>是在主存和高速缓存系统之间交换的 64 字节内存块。</p>
+<p>当并行运行的多个线程正在访问相同的数据值，甚至是相邻的数据值时，它们将访问同一cache line上的数据。在任何核心上运行的任何线程都将获得同一cache line的副本。</p>
+<h2 id="Go-调度剖析"><a href="#Go-调度剖析" class="headerlink" title="Go 调度剖析"></a>Go 调度剖析</h2><p>当 Go 程序启动时，它会为主机上标识的每个虚拟核心提供一个逻辑处理器（P）。</p>
+<p>每个 P 都被分配一个系统线程 M 。<code>M 代表机器（machine）</code>，它仍然是由操作系统管理的，操作系统负责将线程放在一个核心上执行。这意味着当在我的机器上运行 Go 程序时，有 8 个线程可以执行我的工作，每个线程单独连接到一个 P。</p>
+<p>每个 Go 程序都有一个初始 G。G 代表 Go 协程（Goroutine），它是 Go 程序的执行路径。Goroutine 本质上是一个 <a href="https://zh.wikipedia.org/wiki/%E5%8D%8F%E7%A8%8B" target="_blank" rel="noopener">Coroutine</a>，但因为是 Go 语言，所以把字母 “C” 换成了 “G”，我们得到了这个词。你可以将 Goroutines 看作是应用程序级别的线程，它在许多方面与系统线程都相似。正如系统线程在物理核心上进行上下文切换一样，Goroutines 在 M 上进行上下文切换。</p>
+<p>最后一个重点是运行队列。Go 调度器中有两个不同的运行队列：<code>全局运行队列(GRQ)</code>和<code>本地运行队列(LRQ)</code>。每个 P 都有一个LRQ，用于管理分配给在P的上下文中执行的 Goroutines，这些 Goroutine 轮流被和P绑定的M进行上下文切换。GRQ 适用于尚未分配给P的 Goroutines。其中有一个过程是将 Goroutines 从 GRQ 转移到 LRQ。</p>
+<h3 id="协作式调度器"><a href="#协作式调度器" class="headerlink" title="协作式调度器"></a>协作式调度器</h3><p>Go 协作式调度器的优点在于它看起来和感觉上都是抢占式的。你无法预测 Go 调度器将会执行的操作。这是因为这个协作调度器的决策不掌握在开发人员手中，而是在 Go 运行时。将 Go 调度器视为抢占式调度器是非常重要的，并且由于调度程序是非确定性的，因此这并不是一件容易的事。</p>
+<h3 id="Goroutine-状态"><a href="#Goroutine-状态" class="headerlink" title="Goroutine 状态"></a>Goroutine 状态</h3><ul>
+<li><code>Waiting</code>：这意味着 Goroutine 已停止并等待一些事情以继续。这可能是因为等待操作系统（系统调用）或同步调用（原子和互斥操作）等原因。这些类型的延迟是性能下降的根本原因。</li>
+<li><code>Runnable</code> ：这意味着 Goroutine 需要M上的时间片，来执行它的指令。如果同一时间有很多 Goroutines 在竞争时间片，它们都必须等待更长时间才能得到时间片，而且每个 Goroutine 获得的时间片都缩短了。这种类型的调度延迟也可能导致性能下降。</li>
+<li><code>Executing</code> ：这意味着 Goroutine 已经被放置在M上并且正在执行它的指令。与应用程序相关的工作正在完成。这是每个人都想要的。</li>
+</ul>
+<h3 id="上下文切换-1"><a href="#上下文切换-1" class="headerlink" title="上下文切换"></a>上下文切换</h3><p>在 Go 程序中有四类事件，它们允许调度器做出调度决策：</p>
+<ul>
+<li>使用关键字 go</li>
+<li>垃圾回收</li>
+<li>系统调用</li>
+<li>同步和编配</li>
+</ul>
+<h3 id="使用关键字-go"><a href="#使用关键字-go" class="headerlink" title="使用关键字 go"></a>使用关键字 go</h3><p>关键字 go 是用来创建 Goroutines 的。一旦创建了新的 Goroutine，它就为调度器做出调度决策提供了机会。</p>
+<h3 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h3><p>由于 GC 使用自己的 Goroutine 运行，所以这些 Goroutine 需要在 M 上运行的时间片。这会导致 GC 产生大量的调度混乱。但是，调度程序非常聪明地了解 Goroutine 正在做什么，它将智能地做出一些决策。</p>
+<h3 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h3><p>如果 Goroutine 进行系统调用，那么会导致这个 Goroutine 阻塞当前M，有时调度器能够将 Goroutine 从M换出并将新的 Goroutine 换入。然而，有时需要新的M继续执行在P中排队的 Goroutines。这是如何工作的将在下一节中更详细地解释。</p>
+<h3 id="同步和编配"><a href="#同步和编配" class="headerlink" title="同步和编配"></a>同步和编配</h3><p>如果原子、互斥量或通道操作调用将导致 Goroutine 阻塞，调度器可以将之切换到一个新的 Goroutine 去运行。一旦 Goroutine 可以再次运行，它就可以重新排队，并最终在M上切换回来。</p>
+<h3 id="异步系统调用"><a href="#异步系统调用" class="headerlink" title="异步系统调用"></a>异步系统调用</h3><p>当你的操作系统能够异步处理系统调用时，可以使用称为网络轮询器的东西来更有效地处理系统调用。这是通过在这些操作系统中使用 kqueue（MacOS），<a href="https://zh.wikipedia.org/wiki/Epoll" target="_blank" rel="noopener">epoll</a>（Linux）或 iocp（Windows）来实现的。</p>
+<p>基于网络的系统调用可以由我们今天使用的许多操作系统异步处理。这就是为什么我管它叫网络轮询器，因为它的主要用途是处理网络操作。通过使用网络轮询器进行网络系统调用，调度器可以防止 Goroutine 在进行这些系统调用时阻塞M。这可以让M执行P的 LRQ 中其他的 Goroutines，而不需要创建新的M。有助于减少操作系统上的调度负载。</p>
+<h3 id="同步系统调用"><a href="#同步系统调用" class="headerlink" title="同步系统调用"></a>同步系统调用</h3><p>如果 Goroutine 要执行同步的系统调用，会发生什么？在这种情况下，网络轮询器无法使用，而进行系统调用的 Goroutine 将阻塞当前M。这是不幸的，但是没有办法防止这种情况发生。需要同步进行的系统调用的一个例子是基于文件的系统调用。如果你正在使用 CGO，则可能还有其他情况，调用 C 函数也会阻塞M。</p>
+<h3 id="任务窃取（负载均衡思想）"><a href="#任务窃取（负载均衡思想）" class="headerlink" title="任务窃取（负载均衡思想）"></a>任务窃取（负载均衡思想）</h3><p>调度器的另一个方面是它是一个任务窃取的调度器。这有助于在一些领域保持高效率的调度。首先，你最不希望的事情是M进入等待状态，因为一旦发生这种情况，操作系统就会将M从内核切换出去。这意味着P无法完成任何工作，即使有 Goroutine 处于可运行状态也不行，直到一个M被上下文切换回核心。任务窃取还有助于平衡所有P的 Goroutines 数量，这样工作就能更好地分配和更有效地完成。</p>
+<h3 id="线程和-Goroutine区别"><a href="#线程和-Goroutine区别" class="headerlink" title="线程和 Goroutine区别"></a>线程和 Goroutine区别</h3><p>使用线程和 Goroutine 之间有一个主要区别：<br>在使用 Goroutine 的情况下，会复用同一个系统线程和核心。这意味着，从操作系统的角度来看，操作系统线程永远不会进入等待状态。因此，在使用系统线程时的开销在使用 Goroutine 时就不存在了。</p>
+<h2 id="资源："><a href="#资源：" class="headerlink" title="资源："></a>资源：</h2><p><a href="https://segmentfault.com/a/1190000016038785" target="_blank" rel="noopener">https://segmentfault.com/a/1190000016038785</a><br><a href="https://segmentfault.com/a/1190000016611742" target="_blank" rel="noopener">https://segmentfault.com/a/1190000016611742</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Go/" rel="tag"># Go</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/24/Mac-Mac-常用软件笔记/" rel="next" title="[Mac] Mac 常用软件笔记">
+                <i class="fa fa-chevron-left"></i> [Mac] Mac 常用软件笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/10/Go-Module-入门使用/" rel="prev" title="Go Module 入门使用">
+                Go Module 入门使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Leon Xu</p>
+              <p class="site-description motion-element" itemprop="description">专注于后端开发，Golang，Docker，Ruby</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#操作系统调度器"><span class="nav-number">1.</span> <span class="nav-text">操作系统调度器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#执行指令"><span class="nav-number">1.1.</span> <span class="nav-text">执行指令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程状态"><span class="nav-number">1.2.</span> <span class="nav-text">线程状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工作类型"><span class="nav-number">1.3.</span> <span class="nav-text">工作类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文切换"><span class="nav-number">1.4.</span> <span class="nav-text">上下文切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#寻找一个平衡"><span class="nav-number">1.5.</span> <span class="nav-text">寻找一个平衡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU-缓存"><span class="nav-number">1.6.</span> <span class="nav-text">CPU 缓存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Go-调度剖析"><span class="nav-number">2.</span> <span class="nav-text">Go 调度剖析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#协作式调度器"><span class="nav-number">2.1.</span> <span class="nav-text">协作式调度器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Goroutine-状态"><span class="nav-number">2.2.</span> <span class="nav-text">Goroutine 状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文切换-1"><span class="nav-number">2.3.</span> <span class="nav-text">上下文切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用关键字-go"><span class="nav-number">2.4.</span> <span class="nav-text">使用关键字 go</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#垃圾回收"><span class="nav-number">2.5.</span> <span class="nav-text">垃圾回收</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统调用"><span class="nav-number">2.6.</span> <span class="nav-text">系统调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步和编配"><span class="nav-number">2.7.</span> <span class="nav-text">同步和编配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步系统调用"><span class="nav-number">2.8.</span> <span class="nav-text">异步系统调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步系统调用"><span class="nav-number">2.9.</span> <span class="nav-text">同步系统调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#任务窃取（负载均衡思想）"><span class="nav-number">2.10.</span> <span class="nav-text">任务窃取（负载均衡思想）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程和-Goroutine区别"><span class="nav-number">2.11.</span> <span class="nav-text">线程和 Goroutine区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源："><span class="nav-number">3.</span> <span class="nav-text">资源：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Leon Xu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://blog-weixinote-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://weixinote.com/2018/10/10/笔记-Go-调度器/';
+          this.page.identifier = '2018/10/10/笔记-Go-调度器/';
+          this.page.title = '[笔记] Go 调度器';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://blog-weixinote-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
