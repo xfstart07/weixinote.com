@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>维系笔记</title>
+  
+  <subtitle>连接过去、现在、未来</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://weixinote.com/"/>
+  <updated>2019-04-18T08:39:31.063Z</updated>
+  <id>https://weixinote.com/</id>
+  
+  <author>
+    <name>Leon Xu</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>JWT 在 Gin 中的使用</title>
+    <link href="https://weixinote.com/2019/04/18/JWT-%E5%9C%A8-Gin-%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8/"/>
+    <id>https://weixinote.com/2019/04/18/JWT-在-Gin-中的使用/</id>
+    <published>2019-04-18T08:37:49.000Z</published>
+    <updated>2019-04-18T08:39:31.063Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;介绍&quot;&gt;&lt;a href=&quot;#介绍&quot; class=&quot;headerlink&quot; title=&quot;介绍&quot;&gt;&lt;/a&gt;介绍&lt;/h2&gt;&lt;p&gt;JSON Web Token (JWT), 是为了在网络应用环境间传递声明而执行的一种基于JSON的开放标准（(RFC 7519).该 Token 被设计为紧凑且安全的，特别适用于分布式站点的单点登录（SSO）场景。JWT 的声明一般被用来在身份提供者和服务提供者间传递被认证的用户身份信息，以便于从资源服务器获取资源，也可以增加一些额外的其它业务逻辑所必须的声明信息，该 Token 也可直接被用于认证，也可被加密。&lt;/p&gt;
+&lt;h2 id=&quot;使用&quot;&gt;&lt;a href=&quot;#使用&quot; class=&quot;headerlink&quot; title=&quot;使用&quot;&gt;&lt;/a&gt;使用&lt;/h2&gt;&lt;h3 id=&quot;安装&quot;&gt;&lt;a href=&quot;#安装&quot; class=&quot;headerlink&quot; title=&quot;安装&quot;&gt;&lt;/a&gt;安装&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;go get github.com/appleboy/gin-jwt&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;引入&lt;/p&gt;
+&lt;figure class=&quot;highlight go&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;github.com/appleboy/gin-jwt&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;我目前使用的版本是 &lt;code&gt;v2.5.0&lt;/code&gt;.&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
+    
+    
+      <category term="jwt" scheme="https://weixinote.com/tags/jwt/"/>
+    
+      <category term="gin" scheme="https://weixinote.com/tags/gin/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[转载] 内存，内存中的变量和指针</title>
+    <link href="https://weixinote.com/2019/04/18/%E8%BD%AC%E8%BD%BD-%E5%86%85%E5%AD%98%EF%BC%8C%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F%E5%92%8C%E6%8C%87%E9%92%88/"/>
+    <id>https://weixinote.com/2019/04/18/转载-内存，内存中的变量和指针/</id>
+    <published>2019-04-18T07:02:55.000Z</published>
+    <updated>2019-04-18T08:38:36.121Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;a href=&quot;http://golangtutorials.blogspot.com/2011/06/memory-variables-in-memory-and-pointers.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://golangtutorials.blogspot.com/2011/06/memory-variables-in-memory-and-pointers.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;编程中涉及处理内存中可用数据的机器指令。例如，当你想要添加两个数字时，这些数字必须在内存中可用。因此，你应该为此分配一些内存空间。在 Go 中，你可以使用初始化运算符轻松地为大多数类型执行这个操作。&lt;/p&gt;
+&lt;figure class=&quot;highlight go&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;package&lt;/span&gt; main&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;fmt&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;()&lt;/span&gt;&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    i := &lt;span class=&quot;number&quot;&gt;5&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;var&lt;/span&gt; j &lt;span class=&quot;keyword&quot;&gt;int&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    fmt.Println(&lt;span class=&quot;string&quot;&gt;&quot;i is: &quot;&lt;/span&gt;, i)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    fmt.Println(&lt;span class=&quot;string&quot;&gt;&quot;j is: &quot;&lt;/span&gt;, j)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;结果：&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;i is: 5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;j is: 0&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
+    
+    
+      <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
+    
+      <category term="内存" scheme="https://weixinote.com/tags/%E5%86%85%E5%AD%98/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>IntelliJ IDEA 笔记</title>
+    <link href="https://weixinote.com/2019/03/12/IntelliJ-IDEA-%E7%AC%94%E8%AE%B0/"/>
+    <id>https://weixinote.com/2019/03/12/IntelliJ-IDEA-笔记/</id>
+    <published>2019-03-12T08:56:04.000Z</published>
+    <updated>2019-03-12T08:57:26.590Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;常用快捷键&quot;&gt;&lt;a href=&quot;#常用快捷键&quot; class=&quot;headerlink&quot; title=&quot;常用快捷键&quot;&gt;&lt;/a&gt;常用快捷键&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;⌘ Command&lt;/li&gt;
+&lt;li&gt;⇧ Shift&lt;/li&gt;
+&lt;li&gt;⌥ Option&lt;/li&gt;
+&lt;li&gt;⌃ Control&lt;/li&gt;
+&lt;li&gt;↩︎ Return/Enter&lt;/li&gt;
+&lt;li&gt;⌫ Delete&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;文件相关快捷键：&quot;&gt;&lt;a href=&quot;#文件相关快捷键：&quot; class=&quot;headerlink&quot; title=&quot;文件相关快捷键：&quot;&gt;&lt;/a&gt;文件相关快捷键：&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Command + Shift + E，打开最近浏览过的文件。&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="Tools" scheme="https://weixinote.com/categories/Tools/"/>
+    
+    
+      <category term="idea" scheme="https://weixinote.com/tags/idea/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>wrk 压测工具</title>
+    <link href="https://weixinote.com/2018/12/17/wrk-%E5%8E%8B%E6%B5%8B%E5%B7%A5%E5%85%B7/"/>
+    <id>https://weixinote.com/2018/12/17/wrk-压测工具/</id>
+    <published>2018-12-17T08:58:07.000Z</published>
+    <updated>2018-12-17T08:59:53.919Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;wrk -c10 -t10 -d10s -s post.lua &lt;a href=&quot;http://localhost:9005/statistic/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://localhost:9005/statistic/&lt;/a&gt; ktv_reports –latency&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-c&lt;/code&gt; 保持10个连接，并发数&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-t&lt;/code&gt; 开多少个线程&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-d&lt;/code&gt; 压测时间&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-s&lt;/code&gt; Lua脚本&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--latency&lt;/code&gt; 显示延迟分布&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="Devops" scheme="https://weixinote.com/categories/Devops/"/>
+    
+    
+      <category term="wrk" scheme="https://weixinote.com/tags/wrk/"/>
+    
+      <category term="压测" scheme="https://weixinote.com/tags/%E5%8E%8B%E6%B5%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Centos 下 Nginx 使用 Let&#39;s Encrypt</title>
+    <link href="https://weixinote.com/2018/10/11/Centos-%E4%B8%8B-Nginx-%E4%BD%BF%E7%94%A8-Let-s-Encrypt/"/>
+    <id>https://weixinote.com/2018/10/11/Centos-下-Nginx-使用-Let-s-Encrypt/</id>
+    <published>2018-10-11T08:45:52.000Z</published>
+    <updated>2018-12-17T09:00:20.966Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Certbot 的&lt;a href=&quot;https://certbot.eff.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;官方网站&lt;/a&gt;，系统环境是 Centos 7，Nginx 1.12。&lt;/p&gt;
+&lt;h3 id=&quot;获取-Certbot-客户端&quot;&gt;&lt;a href=&quot;#获取-Certbot-客户端&quot; class=&quot;headerlink&quot; title=&quot;获取 Certbot 客户端&quot;&gt;&lt;/a&gt;获取 Certbot 客户端&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;wget https://dl.eff.org/certbot-auto&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;chmod a+x ./certbot-auto&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;./certbot-auto --help&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;配置-nginx-、验证域名所有权&quot;&gt;&lt;a href=&quot;#配置-nginx-、验证域名所有权&quot; class=&quot;headerlink&quot; title=&quot;配置 nginx 、验证域名所有权&quot;&gt;&lt;/a&gt;配置 nginx 、验证域名所有权&lt;/h3&gt;&lt;p&gt;在配置文件（ /etc/nginx/conf.d/blog.ssl.conf ）中添加如下内容，这一步是为了通过 Let’s Encrypt 的验证，验证 blog.weixinote.com 这个域名是属于我的管理之下。&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;# certbot&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;location ~ /.well-known &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		allow all;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;修改配置后重启&lt;code&gt;nginx -s reload&lt;/code&gt;。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Devops" scheme="https://weixinote.com/categories/Devops/"/>
+    
+    
+      <category term="SSL" scheme="https://weixinote.com/tags/SSL/"/>
+    
+      <category term="Nginx" scheme="https://weixinote.com/tags/Nginx/"/>
+    
+      <category term="Centos" scheme="https://weixinote.com/tags/Centos/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Go Module 入门使用</title>
+    <link href="https://weixinote.com/2018/10/10/Go-Module-%E5%85%A5%E9%97%A8%E4%BD%BF%E7%94%A8/"/>
+    <id>https://weixinote.com/2018/10/10/Go-Module-入门使用/</id>
+    <published>2018-10-10T12:38:30.000Z</published>
+    <updated>2018-12-17T08:51:23.788Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;对于Go的版本管理主要用过 glide，下面介绍 Go 1.11 之后官方支持的版本管理工具 mod。关于 mod 官方给出了三个命令 &lt;code&gt;go help mod&lt;/code&gt;、&lt;code&gt;go help modules&lt;/code&gt;、&lt;code&gt;go help module-get&lt;/code&gt; 帮助了解使用。&lt;/p&gt;
+&lt;h2 id=&quot;设置-GO111MODULE&quot;&gt;&lt;a href=&quot;#设置-GO111MODULE&quot; class=&quot;headerlink&quot; title=&quot;设置 GO111MODULE&quot;&gt;&lt;/a&gt;设置 GO111MODULE&lt;/h2&gt;&lt;p&gt;可以用环境变量 &lt;code&gt;GO111MODULE&lt;/code&gt; 开启或关闭模块支持，它有三个可选值：off、on、auto，默认值是 auto。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;GO111MODULE=off&lt;/code&gt; 无模块支持，go 会从 GOPATH 和 vendor 文件夹寻找包。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;GO111MODULE=on&lt;/code&gt; 模块支持，go 会忽略 GOPATH 和 vendor 文件夹，只根据 go.mod 下载依赖。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;GO111MODULE=auto&lt;/code&gt; 在 $GOPATH/src 外面且根目录有 go.mod 文件时，开启模块支持。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在使用模块的时候，GOPATH 是无意义的，不过它还是会把下载的依赖储存在 $GOPATH/pkg/mod 中，也会把 go install 的结果放在 $GOPATH/bin 中。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
+    
+    
+      <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
+    
+      <category term="module" scheme="https://weixinote.com/tags/module/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[笔记] Go 调度器</title>
+    <link href="https://weixinote.com/2018/10/10/%E7%AC%94%E8%AE%B0-Go-%E8%B0%83%E5%BA%A6%E5%99%A8/"/>
+    <id>https://weixinote.com/2018/10/10/笔记-Go-调度器/</id>
+    <published>2018-10-10T03:09:43.000Z</published>
+    <updated>2018-12-17T08:51:23.798Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;操作系统调度器&quot;&gt;&lt;a href=&quot;#操作系统调度器&quot; class=&quot;headerlink&quot; title=&quot;操作系统调度器&quot;&gt;&lt;/a&gt;操作系统调度器&lt;/h2&gt;&lt;h3 id=&quot;执行指令&quot;&gt;&lt;a href=&quot;#执行指令&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
+    
+    
+      <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[Mac] Mac 常用软件笔记</title>
+    <link href="https://weixinote.com/2018/09/24/Mac-Mac-%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6%E7%AC%94%E8%AE%B0/"/>
+    <id>https://weixinote.com/2018/09/24/Mac-Mac-常用软件笔记/</id>
+    <published>2018-09-24T06:21:59.000Z</published>
+    <updated>2018-12-17T08:51:23.797Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;终端&quot;&gt;&lt;a href=&quot;#终端&quot; class=&quot;headerlink&quot; title=&quot;终端&quot;&gt;&lt;/a&gt;终端&lt;/h3&gt;&lt;p&gt;Mac 上我常用的终端应用是：iTerm2。&lt;a href=&quot;https://www.iterm2.com/downloads.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;下载地址&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;iTerm2-使用&quot;&gt;&lt;a href=&quot;#iTerm2-使用&quot; class=&quot;headerlink&quot; title=&quot;iTerm2 使用&quot;&gt;&lt;/a&gt;iTerm2 使用&lt;/h3&gt;&lt;h4 id=&quot;快捷键&quot;&gt;&lt;a href=&quot;#快捷键&quot; class=&quot;headerlink&quot; title=&quot;快捷键&quot;&gt;&lt;/a&gt;快捷键&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;分屏竖屏：&lt;code&gt;command + d&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;分屏横屏：&lt;code&gt;command + shift + d&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;自动补全： &lt;code&gt;⌘;&lt;/code&gt; &lt;code&gt;command + ;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;显示历史命令： &lt;code&gt;command + shift + h&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Tab 搜索： &lt;code&gt;command + option + e&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;高亮当前鼠标位置：&lt;code&gt;command + /&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;显示配置 &lt;code&gt;command + ,&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="Mac" scheme="https://weixinote.com/categories/Mac/"/>
+    
+    
+      <category term="Mac" scheme="https://weixinote.com/tags/Mac/"/>
+    
+      <category term="brew" scheme="https://weixinote.com/tags/brew/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[Devops] 基于 Gitlab+Jenkins+Ansible+Supervisor实现Go项目自动化部署</title>
+    <link href="https://weixinote.com/2018/09/24/Devops-%E5%9F%BA%E4%BA%8E-Gitlab-Jenkins-Ansible-Supervisor%E5%AE%9E%E7%8E%B0Go%E9%A1%B9%E7%9B%AE%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2/"/>
+    <id>https://weixinote.com/2018/09/24/Devops-基于-Gitlab-Jenkins-Ansible-Supervisor实现Go项目自动化部署/</id>
+    <published>2018-09-24T06:01:24.000Z</published>
+    <updated>2018-12-17T08:51:23.786Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;GitLab-安装&quot;&gt;&lt;a href=&quot;#GitLab-安装&quot; class=&quot;headerlink&quot; title=&quot;GitLab 安装&quot;&gt;&lt;/a&gt;GitLab 安装&lt;/h3&gt;&lt;p&gt;GitLab 安装方式可以参考官方给出的教程：&lt;a href=&quot;https://about.gitlab.com/installation/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://about.gitlab.com/installation/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;注：推荐使用 Docker 安装。&lt;/p&gt;
+&lt;h3 id=&quot;GitLab-CI-CD&quot;&gt;&lt;a href=&quot;#GitLab-CI-CD&quot; class=&quot;headerlink&quot; title=&quot;GitLab CI/CD&quot;&gt;&lt;/a&gt;GitLab CI/CD&lt;/h3&gt;&lt;p&gt;参考：&lt;a href=&quot;http://blog.weixinote.com/2018/06/10/%E6%90%AD%E5%BB%BAGitLab-CI/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;搭建GitLab-CI&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;GitLab-通知-Jenkins-部署&quot;&gt;&lt;a href=&quot;#GitLab-通知-Jenkins-部署&quot; class=&quot;headerlink&quot; title=&quot;GitLab 通知 Jenkins 部署&quot;&gt;&lt;/a&gt;GitLab 通知 Jenkins 部署&lt;/h3&gt;&lt;p&gt;触发器参考：&lt;a href=&quot;http://blog.weixinote.com/2018/06/10/Gitlab-%E6%8F%90%E4%BA%A4%E4%BB%A3%E7%A0%81%E8%A7%A6%E5%8F%91-Jenkins-%E9%83%A8%E7%BD%B2/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Gitlab-提交代码触发-Jenkins-部署&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;Jenkins-安装-GitLab、Ansible-插件&quot;&gt;&lt;a href=&quot;#Jenkins-安装-GitLab、Ansible-插件&quot; class=&quot;headerlink&quot; title=&quot;Jenkins 安装 GitLab、Ansible 插件&quot;&gt;&lt;/a&gt;Jenkins 安装 GitLab、Ansible 插件&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;安装插件的路径：系统管理 –&amp;gt; 插件管理&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="Devops" scheme="https://weixinote.com/categories/Devops/"/>
+    
+    
+      <category term="Devops" scheme="https://weixinote.com/tags/Devops/"/>
+    
+      <category term="gitlab" scheme="https://weixinote.com/tags/gitlab/"/>
+    
+      <category term="jenkins" scheme="https://weixinote.com/tags/jenkins/"/>
+    
+      <category term="ansible" scheme="https://weixinote.com/tags/ansible/"/>
+    
+      <category term="supervisor" scheme="https://weixinote.com/tags/supervisor/"/>
+    
+      <category term="go" scheme="https://weixinote.com/tags/go/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[Devops] 应用进程管理工具 supervisord</title>
+    <link href="https://weixinote.com/2018/09/24/Devops-%E5%BA%94%E7%94%A8%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7-supervisord/"/>
+    <id>https://weixinote.com/2018/09/24/Devops-应用进程管理工具-supervisord/</id>
+    <published>2018-09-24T05:53:10.000Z</published>
+    <updated>2018-12-17T08:51:23.787Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Supervisor (&lt;a href=&quot;http://supervisord.org&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://supervisord.org&lt;/a&gt;) 是一个用 Python 写的进程管理工具，可以很方便的用来启动、重启、关闭进程（不仅仅是 Python 进程）。除了对单个进程的控制，还可以同时启动、关闭多个进程，比如很不幸的服务器出问题导致所有应用程序都被杀死，此时可以用 supervisor 同时启动所有应用程序而不是一个一个地敲命令启动。&lt;/p&gt;
+&lt;h3 id=&quot;安装&quot;&gt;&lt;a href=&quot;#安装&quot; class=&quot;headerlink&quot; title=&quot;安装&quot;&gt;&lt;/a&gt;安装&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;pip install supervisor&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;如果是 Centos 可以使用 yum 安装，版本可能比较低一些。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Devops" scheme="https://weixinote.com/categories/Devops/"/>
+    
+    
+      <category term="Devops" scheme="https://weixinote.com/tags/Devops/"/>
+    
+      <category term="supervisor" scheme="https://weixinote.com/tags/supervisor/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[DevOps] Ansible 入门介绍</title>
+    <link href="https://weixinote.com/2018/09/24/DevOps-Ansible-%E5%85%A5%E9%97%A8%E4%BB%8B%E7%BB%8D/"/>
+    <id>https://weixinote.com/2018/09/24/DevOps-Ansible-入门介绍/</id>
+    <published>2018-09-24T05:50:45.000Z</published>
+    <updated>2018-12-17T08:51:23.786Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Ansilbe 是一个部署一群远程主机的工具。远程的主机可以是远程虚拟机或物理机， 也可以是本地主机。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ansible 能做什么？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Ansilbe 通过 SSH 协议实现远程节点和管理节点之间的通信。理论上说，只要管理员通过 ssh 登录到一台远程主机上能做的操作，Ansible 都可以做到。&lt;/p&gt;
+&lt;p&gt;包括：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;拷贝文件&lt;/li&gt;
+&lt;li&gt;安装软件包&lt;/li&gt;
+&lt;li&gt;启动服务&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="Devops" scheme="https://weixinote.com/categories/Devops/"/>
+    
+    
+      <category term="Devops" scheme="https://weixinote.com/tags/Devops/"/>
+    
+      <category term="ansible" scheme="https://weixinote.com/tags/ansible/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[Go] 计算文件MD5</title>
+    <link href="https://weixinote.com/2018/09/13/Go-%E8%AE%A1%E7%AE%97%E6%96%87%E4%BB%B6MD5/"/>
+    <id>https://weixinote.com/2018/09/13/Go-计算文件MD5/</id>
+    <published>2018-09-13T10:12:43.000Z</published>
+    <updated>2018-12-17T08:51:23.796Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;Go-计算小文件&quot;&gt;&lt;a href=&quot;#Go-计算小文件&quot; class=&quot;headerlink&quot; title=&quot;Go 计算小文件&quot;&gt;&lt;/a&gt;Go 计算小文件&lt;/h3&gt;&lt;figure class=&quot;highlight go&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;import&lt;/span&gt; (&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;string&quot;&gt;&quot;fmt&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;string&quot;&gt;&quot;crypto/md5&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;string&quot;&gt;&quot;io&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;string&quot;&gt;&quot;os&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;params&quot;&gt;()&lt;/span&gt;&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	filePath := &lt;span class=&quot;string&quot;&gt;&quot;/Users/x/golang/src/example/Readme.md&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	file, err := os.Open(filePath)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; err != &lt;span class=&quot;literal&quot;&gt;nil&lt;/span&gt; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;		&lt;span class=&quot;built_in&quot;&gt;panic&lt;/span&gt;(err)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;span class=&quot;keyword&quot;&gt;defer&lt;/span&gt; file.Close()&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	md5h := md5.New()&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	io.Copy(md5h, file)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	fmt.Printf(&lt;span class=&quot;string&quot;&gt;&quot;%x&quot;&lt;/span&gt;, md5h.Sum([]&lt;span class=&quot;keyword&quot;&gt;byte&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&quot;&quot;&lt;/span&gt;))) &lt;span class=&quot;comment&quot;&gt;//md5&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;因为文件小，所有直接将文件使用 &lt;code&gt;io.Copy&lt;/code&gt; 读取进行 md5 的计算。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
+    
+    
+      <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[Go 问题] 报错 &quot;flag provided but not defined: -goversion&quot;</title>
+    <link href="https://weixinote.com/2018/08/29/Go-%E9%97%AE%E9%A2%98-%E6%8A%A5%E9%94%99-goversion/"/>
+    <id>https://weixinote.com/2018/08/29/Go-问题-报错-goversion/</id>
+    <published>2018-08-29T03:47:37.000Z</published>
+    <updated>2018-12-17T08:51:23.796Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;今天 Jenkins 打包 go 项目的时候发生了一个错误，提示：“flag provided but not defined: -goversion”。&lt;/p&gt;
+&lt;p&gt;原因是因为系统中安装了两个 go 版本。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
+    
+    
+      <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
+    
+      <category term="Bug" scheme="https://weixinote.com/tags/Bug/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[Go 标准库] sync.Once</title>
+    <link href="https://weixinote.com/2018/08/16/Go-%E6%A0%87%E5%87%86%E5%BA%93-sync-Once/"/>
+    <id>https://weixinote.com/2018/08/16/Go-标准库-sync-Once/</id>
+    <published>2018-08-16T03:13:10.000Z</published>
+    <updated>2018-12-17T08:51:23.795Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;code&gt;sync.Once&lt;/code&gt; 用来保证 Once 的 Do 只运行一次。&lt;/p&gt;
+&lt;p&gt;我们来看看 &lt;code&gt;sync.Once&lt;/code&gt; 的类型结构体：&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;type Once struct &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	m    Mutex&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	done uint32&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;主要有两个字段，&lt;code&gt;Mutex&lt;/code&gt; 是一个互斥锁，&lt;code&gt;done&lt;/code&gt; 是一个整型。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
+    
+    
+      <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用 docker 运行 NSQ</title>
+    <link href="https://weixinote.com/2018/08/09/%E4%BD%BF%E7%94%A8-docker-%E8%BF%90%E8%A1%8C-NSQ/"/>
+    <id>https://weixinote.com/2018/08/09/使用-docker-运行-NSQ/</id>
+    <published>2018-08-09T07:36:25.000Z</published>
+    <updated>2018-12-17T08:51:23.797Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;下载容器&quot;&gt;&lt;a href=&quot;#下载容器&quot; class=&quot;headerlink&quot; title=&quot;下载容器&quot;&gt;&lt;/a&gt;下载容器&lt;/h3&gt;&lt;p&gt;首先pull一个nsq的镜像&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;docker pull nsqio/nsq&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;启动容器&quot;&gt;&lt;a href=&quot;#启动容器&quot; class=&quot;headerlink&quot; title=&quot;启动容器&quot;&gt;&lt;/a&gt;启动容器&lt;/h3&gt;&lt;p&gt;1）运行docker容器lookupd&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;# docker run -d --name nsqlookupd -p 4160:4160 -p 4161:4161 nsqio/nsq /nsqlookupd&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;f37732ecb5a667da072bbdb132c0f7d616dca528885202152592267ac2a2cbdc&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-d&lt;/code&gt; 以守护进程的方式运行&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--name lookupd&lt;/code&gt; 容器名称为 lookup&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-p 4160:4160 -p 4161:4161&lt;/code&gt; 绑定端口&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;nsqio/nsq&lt;/code&gt; 镜像名称&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/nsqlookupd&lt;/code&gt; 运行命令&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="MQ" scheme="https://weixinote.com/categories/MQ/"/>
+    
+    
+      <category term="Docker" scheme="https://weixinote.com/tags/Docker/"/>
+    
+      <category term="MQ" scheme="https://weixinote.com/tags/MQ/"/>
+    
+      <category term="NSQ" scheme="https://weixinote.com/tags/NSQ/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[MQ] 使用命令行运行 NSQ</title>
+    <link href="https://weixinote.com/2018/08/09/%E4%BD%BF%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%BF%90%E8%A1%8C-NSQ/"/>
+    <id>https://weixinote.com/2018/08/09/使用命令行运行-NSQ/</id>
+    <published>2018-08-09T07:32:19.000Z</published>
+    <updated>2018-12-17T08:51:23.798Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;安装&quot;&gt;&lt;a href=&quot;#安装&quot; class=&quot;headerlink&quot; title=&quot;安装&quot;&gt;&lt;/a&gt;安装&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;下载&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;当前(20180809)版本: 1.0.0-compat&lt;/p&gt;
+&lt;p&gt;mac: &lt;a href=&quot;https://s3.amazonaws.com/bitly-downloads/nsq/nsq-1.0.0-compat.darwin-amd64.go1.8.tar.gz&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://s3.amazonaws.com/bitly-downloads/nsq/nsq-1.0.0-compat.darwin-amd64.go1.8.tar.gz&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;linux: &lt;a href=&quot;https://s3.amazonaws.com/bitly-downloads/nsq/nsq-1.0.0-compat.linux-amd64.go1.8.tar.gz&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://s3.amazonaws.com/bitly-downloads/nsq/nsq-1.0.0-compat.linux-amd64.go1.8.tar.gz&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;解压&lt;/strong&gt;&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;tar xvf nsq.tar.gz&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+      <category term="MQ" scheme="https://weixinote.com/categories/MQ/"/>
+    
+    
+      <category term="MQ" scheme="https://weixinote.com/tags/MQ/"/>
+    
+      <category term="NSQ" scheme="https://weixinote.com/tags/NSQ/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[Go 教程系列笔记] Mutex（互斥锁）</title>
+    <link href="https://weixinote.com/2018/08/01/Go-%E6%95%99%E7%A8%8B%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0-Mutex%EF%BC%88%E4%BA%92%E6%96%A5%E9%94%81%EF%BC%89/"/>
+    <id>https://weixinote.com/2018/08/01/Go-教程系列笔记-Mutex（互斥锁）/</id>
+    <published>2018-08-01T10:06:37.000Z</published>
+    <updated>2018-12-17T08:51:23.789Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在本教程中，我们将了解互斥锁。我们还将学习如何使用互斥锁和通道解决竞争问题。&lt;/p&gt;
+&lt;h3 id=&quot;临界区&quot;&gt;&lt;a href=&quot;#临界区&quot; class=&quot;headerlink&quot; title=&quot;临界区&quot;&gt;&lt;/a&gt;临界区&lt;/h3&gt;&lt;p&gt;在讲互斥锁之前，了解并发编程中&lt;strong&gt;临界区&lt;/strong&gt;的概念非常重要。当程序同时运行时，多个 goroutine 同时访问修改共享资源，修改共享资源的这段代码称为&lt;strong&gt;临界区&lt;/strong&gt;。例如，假设我们要将变量 x 递增1.&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
+    
+    
+      <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[Go 教程系列笔记] Select</title>
+    <link href="https://weixinote.com/2018/08/01/Go-%E6%95%99%E7%A8%8B%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0-Select/"/>
+    <id>https://weixinote.com/2018/08/01/Go-教程系列笔记-Select/</id>
+    <published>2018-08-01T10:04:33.000Z</published>
+    <updated>2018-12-17T08:51:23.789Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;什么是-select-？&quot;&gt;&lt;a href=&quot;#什么是-select-？&quot; class=&quot;headerlink&quot; title=&quot;什么是 select ？&quot;&gt;&lt;/a&gt;什么是 select ？&lt;/h3&gt;&lt;p&gt;&lt;code&gt;select&lt;/code&gt; 语句用于从多个&lt;strong&gt;发送/接收&lt;/strong&gt;操作通道中进行选择。select 语句将阻塞，直到其中一个发送/接收操作准备就绪。如果多个操作都准备好，则随机选择其中一个操作。语法类似 &lt;code&gt;switch&lt;/code&gt; 除了每个 case 语句都是通道操作。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
+    
+    
+      <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[Go 教程系列笔记] 缓冲通道和工作池</title>
+    <link href="https://weixinote.com/2018/08/01/Go-%E6%95%99%E7%A8%8B%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0-%E7%BC%93%E5%86%B2%E9%80%9A%E9%81%93%E5%92%8C%E5%B7%A5%E4%BD%9C%E6%B1%A0/"/>
+    <id>https://weixinote.com/2018/08/01/Go-教程系列笔记-缓冲通道和工作池/</id>
+    <published>2018-08-01T07:19:31.000Z</published>
+    <updated>2018-12-17T08:51:23.795Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;我们在上一个教程中讨论的所有通道基本上都是无缓冲的。正如我们在通道教程中详细讨论的那样，发送和接收无缓冲的通道都是阻塞的。&lt;/p&gt;
+&lt;p&gt;可以使用缓冲区创建通道。仅当缓冲区已满时才会阻塞对缓冲通道的发送。类似地，仅当缓冲区为空才阻塞从缓冲通道接收。&lt;/p&gt;
+&lt;p&gt;可以通过将额外的容量参数传递给 &lt;code&gt;make&lt;/code&gt; 指定缓冲区大小的函数来创建缓冲通道。&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;ch := make(chan type, capacity)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;对于具有缓冲区的通道，上述语法中的容量应大于0。默认情况下，无缓冲通道的容量为0。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
+    
+    
+      <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[Go 教程系列笔记] Channel 通道</title>
+    <link href="https://weixinote.com/2018/08/01/Go-%E6%95%99%E7%A8%8B%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0-Channel-%E9%80%9A%E9%81%93/"/>
+    <id>https://weixinote.com/2018/08/01/Go-教程系列笔记-Channel-通道/</id>
+    <published>2018-08-01T07:09:45.000Z</published>
+    <updated>2018-12-17T08:51:23.788Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在上一个教程中，我们讨论了如何使用 goroutine 在 Go 中实现并发。在本教程中，我们将讨论有关通道以及 goroutine 如何使用通道进行通信。&lt;/p&gt;
+&lt;h3 id=&quot;什么是通道？&quot;&gt;&lt;a href=&quot;#什么是通道？&quot; class=&quot;headerlink&quot; title=&quot;什么是通道？&quot;&gt;&lt;/a&gt;什么是通道？&lt;/h3&gt;&lt;p&gt;通道可以被认为是 goroutine 通信的通道。类似于水在管道中从一端流向另一端的方式，数据可以从一端发送，另一端使用通道接收。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
+    
+    
+      <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
+    
+  </entry>
+  
+</feed>
