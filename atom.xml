@@ -292,13 +292,13 @@
     
       <category term="Devops" scheme="https://weixinote.com/tags/Devops/"/>
     
-      <category term="supervisor" scheme="https://weixinote.com/tags/supervisor/"/>
-    
       <category term="gitlab" scheme="https://weixinote.com/tags/gitlab/"/>
     
       <category term="jenkins" scheme="https://weixinote.com/tags/jenkins/"/>
     
       <category term="ansible" scheme="https://weixinote.com/tags/ansible/"/>
+    
+      <category term="supervisor" scheme="https://weixinote.com/tags/supervisor/"/>
     
       <category term="go" scheme="https://weixinote.com/tags/go/"/>
     
