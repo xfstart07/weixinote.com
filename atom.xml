@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://weixinote.com/"/>
-  <updated>2019-06-10T07:26:12.274Z</updated>
+  <updated>2019-06-10T08:08:13.580Z</updated>
   <id>https://weixinote.com/</id>
   
   <author>
@@ -21,13 +21,13 @@
     <link href="https://weixinote.com/2019/06/10/Makefile-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     <id>https://weixinote.com/2019/06/10/Makefile-学习笔记/</id>
     <published>2019-06-10T07:23:54.000Z</published>
-    <updated>2019-06-10T07:26:12.274Z</updated>
+    <updated>2019-06-10T08:08:13.580Z</updated>
     
     <summary type="html">
     
       &lt;p&gt;&lt;code&gt;make&lt;/code&gt;命令执行时，需要一个 &lt;code&gt;Makefile&lt;/code&gt;文件，以告诉&lt;code&gt;make&lt;/code&gt;命令需要怎么样的去编译和链接程序。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;Makefile 类似像带有上下文的 shell 命令记录文本。&lt;/p&gt;
+&lt;p&gt;Makefile 像带有上下文的 shell 命令。将一组命令打包成一个标签名称。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h3 id=&quot;Makefile的规则&quot;&gt;&lt;a href=&quot;#Makefile的规则&quot; class=&quot;headerlink&quot; title=&quot;Makefile的规则&quot;&gt;&lt;/a&gt;&lt;code&gt;Makefile&lt;/code&gt;的规则&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;target ... : prerequisites ...
     command
@@ -292,13 +292,13 @@
     
       <category term="Devops" scheme="https://weixinote.com/tags/Devops/"/>
     
+      <category term="supervisor" scheme="https://weixinote.com/tags/supervisor/"/>
+    
       <category term="gitlab" scheme="https://weixinote.com/tags/gitlab/"/>
     
       <category term="jenkins" scheme="https://weixinote.com/tags/jenkins/"/>
     
       <category term="ansible" scheme="https://weixinote.com/tags/ansible/"/>
-    
-      <category term="supervisor" scheme="https://weixinote.com/tags/supervisor/"/>
     
       <category term="go" scheme="https://weixinote.com/tags/go/"/>
     
