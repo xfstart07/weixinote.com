@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Go,数据结构,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="维系笔记" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="channel atomic sync.Mutex sync.WaitGroup sync.Pool sync.Map  channel [Go 教程系列笔记] Channel 通道 [The way to go] 协程间的通信2  基本用法">
+<meta name="keywords" content="Go,数据结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="golang 数据结构 2">
+<meta property="og:url" content="https://weixinote.com/2019/08/13/golang-数据结构-2/index.html">
+<meta property="og:site_name" content="维系笔记">
+<meta property="og:description" content="channel atomic sync.Mutex sync.WaitGroup sync.Pool sync.Map  channel [Go 教程系列笔记] Channel 通道 [The way to go] 协程间的通信2  基本用法">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-08-13T01:31:36.459Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="golang 数据结构 2">
+<meta name="twitter:description" content="channel atomic sync.Mutex sync.WaitGroup sync.Pool sync.Map  channel [Go 教程系列笔记] Channel 通道 [The way to go] 协程间的通信2  基本用法">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://weixinote.com/2019/08/13/golang-数据结构-2/">
+
+
+
+
+
+  <title>golang 数据结构 2 | 维系笔记</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-123195177-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">维系笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">连接过去、现在、未来</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://weixinote.com/2019/08/13/golang-数据结构-2/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leon Xu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="维系笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">golang 数据结构 2</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-13T09:24:44+08:00">
+                2019-08-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index">
+                    <span itemprop="name">Go</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/13/golang-数据结构-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/08/13/golang-数据结构-2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li>channel</li>
+<li>atomic</li>
+<li>sync.Mutex</li>
+<li>sync.WaitGroup</li>
+<li>sync.Pool</li>
+<li>sync.Map</li>
+</ul>
+<h3 id="channel"><a href="#channel" class="headerlink" title="channel"></a>channel</h3><ul>
+<li><a href="https://blog.weixinote.com/2018/08/01/Go-%E6%95%99%E7%A8%8B%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0-Channel-%E9%80%9A%E9%81%93/" target="_blank" rel="noopener">[Go 教程系列笔记] Channel 通道</a></li>
+<li><a href="mweblib://15180603768126" target="_blank" rel="noopener">[The way to go] 协程间的通信2</a></li>
+</ul>
+<p>基本用法</p>
+<a id="more"></a>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ch <span class="keyword">chan</span> <span class="keyword">int</span> </span><br><span class="line">ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">2</span>) <span class="comment">// 带缓存 chan</span></span><br><span class="line"></span><br><span class="line">ch &lt;- value <span class="comment">// 给 channel 发送值</span></span><br><span class="line">value := &lt;- ch <span class="comment">// 从 channel 接收值</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// for range channel</span></span><br><span class="line"><span class="keyword">for</span> value := <span class="keyword">range</span> ch &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数中使用</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">run</span><span class="params">(ch <span class="keyword">chan</span> <span class="keyword">int</span>)</span></span>&#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">run</span><span class="params">(ch &lt;-<span class="keyword">chan</span> <span class="keyword">int</span>)</span></span> &#123;&#125; <span class="comment">// 指定是一个只能接收 channel </span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">run</span><span class="params">(ch <span class="keyword">chan</span>&lt;- <span class="keyword">int</span>)</span></span> &#123;&#125; <span class="comment">// 指定是一个只能发送 channel </span></span><br><span class="line"></span><br><span class="line"><span class="built_in">close</span>(ch) <span class="comment">// 关闭 channel，关闭后不能再往 channel 发送消息</span></span><br></pre></td></tr></table></figure>
+<h3 id="atomic"><a href="#atomic" class="headerlink" title="atomic"></a>atomic</h3><p><a href="https://golang.org/pkg/sync/atomic/" target="_blank" rel="noopener">https://golang.org/pkg/sync/atomic/</a></p>
+<p>各种原子操作</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> data <span class="keyword">int32</span></span><br><span class="line">data = atomic.AddInt32(data, <span class="number">1</span>) <span class="comment">// int类型原子操作，还有方法：AddInt64，AddUint32 etc.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 支持任何类型</span></span><br><span class="line"><span class="keyword">var</span> value atomic.Value</span><br><span class="line"></span><br><span class="line">value.Store(data) <span class="comment">// 存储</span></span><br><span class="line">data := value.Load().(<span class="keyword">int32</span>) <span class="comment">// 获取</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 进行 compare-and-swap(CAS) 操作</span></span><br><span class="line">swaped := atomic.CompareAndSwapInt32(&amp;data, data, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p>atomic.Value 可以使用在项目中存储 config。</p>
+<p><a href="https://zh.wikipedia.org/wiki/%E6%AF%94%E8%BE%83%E5%B9%B6%E4%BA%A4%E6%8D%A2" target="_blank" rel="noopener">比较并交换 CAS</a></p>
+<h3 id="sync-Mutex"><a href="#sync-Mutex" class="headerlink" title="sync.Mutex"></a>sync.Mutex</h3><p><a href="https://blog.weixinote.com/2018/08/01/Go-%E6%95%99%E7%A8%8B%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0-Mutex%EF%BC%88%E4%BA%92%E6%96%A5%E9%94%81%EF%BC%89/" target="_blank" rel="noopener">[Go 教程系列笔记] Mutex（互斥锁）</a></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 互斥锁一般配合 struct 一起用</span></span><br><span class="line">clazz := <span class="keyword">struct</span> &#123;</span><br><span class="line">    data <span class="keyword">int</span></span><br><span class="line">    sync.Mutex</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">clazz.Lock() <span class="comment">// 申请锁</span></span><br><span class="line">clazz.data++</span><br><span class="line">clazz.Unlock() <span class="comment">// 释放锁</span></span><br></pre></td></tr></table></figure>
+<h4 id="sync-RWMutex"><a href="#sync-RWMutex" class="headerlink" title="sync.RWMutex"></a>sync.RWMutex</h4><p>读写锁是可以获得任意多的读锁和一个写锁。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 互斥锁一般配合 struct 一起用</span></span><br><span class="line">clazz := <span class="keyword">struct</span> &#123;</span><br><span class="line">    data <span class="keyword">int</span></span><br><span class="line">    sync.Mutex</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">clazz.RLock() <span class="comment">// 申请读锁</span></span><br><span class="line">fmt.Println(clazz.data)</span><br><span class="line">clazz.RUnlock() <span class="comment">// 释放读锁</span></span><br><span class="line"></span><br><span class="line">clazz.Lock() <span class="comment">// 申请写锁</span></span><br><span class="line">clazz.data++</span><br><span class="line">clazz.Unlock() <span class="comment">// 释放写锁</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在获取写锁时，必须读锁和写锁都必须释放后才能获得。不然会进入阻塞。</p>
+</blockquote>
+<h3 id="sync-Pool"><a href="#sync-Pool" class="headerlink" title="sync.Pool"></a>sync.Pool</h3><p>Pool 是一组可以单独保存和获取的临时对象。</p>
+<p><strong>任何存储在 Pool 的元素可能在任何时候被删除而不会通知。</strong></p>
+<p>Pool 在多个 goroutines 同时使用是线程安全的。</p>
+<p>Pool 目的是缓存已分配但未使用的元素。以减少内存分配，缓解 GC 的压力。</p>
+<p>基本使用</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> bufPool = sync.Pool&#123;</span><br><span class="line">	New: <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="title">interface</span></span>&#123;&#125; &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="built_in">new</span>(bytes.Buffer)</span><br><span class="line">	&#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Log</span><span class="params">(w io.Writer, key, val <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">    b := bufPool.Get().(*bytes.Buffer)</span><br><span class="line">    b.Reset() <span class="comment">// Pool 获取的元素都需要做初始化</span></span><br><span class="line">    </span><br><span class="line">    b.WriteString(time.Now().Format(time.RFC3339))</span><br><span class="line">    b.WriteByte(<span class="string">' '</span>)</span><br><span class="line">    b.WriteString(key)</span><br><span class="line">    b.WriteByte(<span class="string">'='</span>)</span><br><span class="line">    b.WriteString(val)</span><br><span class="line">    w.Write(b.Bytes())</span><br><span class="line">    bufPool.Put(b) <span class="comment">// 放回 Pool</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Pool 定义</span></span><br><span class="line"><span class="keyword">type</span> Pool <span class="keyword">struct</span> &#123;</span><br><span class="line">    <span class="comment">// New 设置一个函数用来创建元素</span></span><br><span class="line">    New <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="title">interface</span></span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Pool 方法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *Pool)</span> <span class="title">Get</span><span class="params">()</span> <span class="title">interface</span></span>&#123;&#125; <span class="comment">// 获取元素</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *Pool)</span> <span class="title">Put</span><span class="params">(x <span class="keyword">interface</span>&#123;&#125;)</span> // 放回元素</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>sync.Pool 的问题是，Pool 中的对象会随时被 GC 清理掉，这使得 sync.Pool 只适合做简单的对象池，而不适合做连接池(http.Client，redis.Client 这类连接对象)。</p>
+</blockquote>
+<p><a href="https://studygolang.com/articles/16282" target="_blank" rel="noopener">https://studygolang.com/articles/16282</a></p>
+<h3 id="sync-Map"><a href="#sync-Map" class="headerlink" title="sync.Map"></a>sync.Map</h3><p><a href="https://golang.org/pkg/sync/#Map" target="_blank" rel="noopener">https://golang.org/pkg/sync/#Map</a></p>
+<p>使用 sync.Map 的原因是 golang 的 map 的读写不是并发安全的。</p>
+<p>Map 是像 <code>map[interface{}]interface{}</code> 但在多个 goroutines 使用是并发安全。</p>
+<p>Map 类型优化的两个点：</p>
+<ul>
+<li>(1) 当一个键值对只写一次，但读很多次，就像在只增长的缓存中一样。</li>
+<li>(2) 当多个 goroutines 读取、写入和覆盖不相交的键值对时。</li>
+</ul>
+<p>当是这两类情况下，比起 map 搭配 Mutex 或 RWMutex，使用 Map 可以显著减少锁的争用情况。</p>
+<p>基本使用</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> hash sync.Map</span><br><span class="line"></span><br><span class="line">hash.Store(<span class="string">"name"</span>, <span class="string">"leon"</span>) <span class="comment">// 存储 key, value</span></span><br><span class="line">value, ok := hash.Load(<span class="string">"name"</span>) <span class="comment">// 读取</span></span><br><span class="line"></span><br><span class="line">actual, loaded := hash.LoadOrStore(<span class="string">"name"</span>, <span class="string">"leonXu"</span>) <span class="comment">// 读取或更新</span></span><br><span class="line"></span><br><span class="line">hash.Delete(<span class="string">"name"</span>) <span class="comment">// 删除</span></span><br><span class="line"></span><br><span class="line">final = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">interface</span>&#123;&#125;]<span class="keyword">interface</span>&#123;&#125;)</span><br><span class="line"><span class="comment">// 循环 Map</span></span><br><span class="line">hash.Range(<span class="function"><span class="keyword">func</span><span class="params">(k, v <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">	final[k] = v</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><a href="https://colobu.com/2017/07/11/dive-into-sync-Map/" target="_blank" rel="noopener">Go 1.9 sync.Map揭秘</a></p>
+<h2 id="Ref"><a href="#Ref" class="headerlink" title="Ref"></a>Ref</h2><ul>
+<li><a href="https://golang.org/pkg/sync" target="_blank" rel="noopener">https://golang.org/pkg/sync</a></li>
+<li><a href="https://golang.org/pkg/sync/atomic/" target="_blank" rel="noopener">https://golang.org/pkg/sync/atomic/</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Go/" rel="tag"># Go</a>
+          
+            <a href="/tags/数据结构/" rel="tag"># 数据结构</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/13/golang-数据结构/" rel="next" title="golang 数据结构">
+                <i class="fa fa-chevron-left"></i> golang 数据结构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Leon Xu</p>
+              <p class="site-description motion-element" itemprop="description">专注于后端开发，Golang，Docker，Ruby</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#channel"><span class="nav-number">1.</span> <span class="nav-text">channel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#atomic"><span class="nav-number">2.</span> <span class="nav-text">atomic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sync-Mutex"><span class="nav-number">3.</span> <span class="nav-text">sync.Mutex</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sync-RWMutex"><span class="nav-number">3.1.</span> <span class="nav-text">sync.RWMutex</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sync-Pool"><span class="nav-number">4.</span> <span class="nav-text">sync.Pool</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sync-Map"><span class="nav-number">5.</span> <span class="nav-text">sync.Map</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#Ref"><span class="nav-number"></span> <span class="nav-text">Ref</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Leon Xu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://blog-weixinote-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://weixinote.com/2019/08/13/golang-数据结构-2/';
+          this.page.identifier = '2019/08/13/golang-数据结构-2/';
+          this.page.title = 'golang 数据结构 2';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://blog-weixinote-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
