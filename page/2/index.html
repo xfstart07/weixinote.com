@@ -273,6 +273,168 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://weixinote.com/2018/09/24/Devops-基于-Gitlab-Jenkins-Ansible-Supervisor实现Go项目自动化部署/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leon Xu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="维系笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/24/Devops-基于-Gitlab-Jenkins-Ansible-Supervisor实现Go项目自动化部署/" itemprop="url">[Devops] 基于 Gitlab+Jenkins+Ansible+Supervisor实现Go项目自动化部署</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-24T14:01:24+08:00">
+                2018-09-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Devops/" itemprop="url" rel="index">
+                    <span itemprop="name">Devops</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/09/24/Devops-基于-Gitlab-Jenkins-Ansible-Supervisor实现Go项目自动化部署/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/09/24/Devops-基于-Gitlab-Jenkins-Ansible-Supervisor实现Go项目自动化部署/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="GitLab-安装"><a href="#GitLab-安装" class="headerlink" title="GitLab 安装"></a>GitLab 安装</h3><p>GitLab 安装方式可以参考官方给出的教程：<a href="https://about.gitlab.com/installation/" target="_blank" rel="noopener">https://about.gitlab.com/installation/</a></p>
+<p>注：推荐使用 Docker 安装。</p>
+<h3 id="GitLab-CI-CD"><a href="#GitLab-CI-CD" class="headerlink" title="GitLab CI/CD"></a>GitLab CI/CD</h3><p>参考：<a href="http://blog.weixinote.com/2018/06/10/%E6%90%AD%E5%BB%BAGitLab-CI/" target="_blank" rel="noopener">搭建GitLab-CI</a></p>
+<h3 id="GitLab-通知-Jenkins-部署"><a href="#GitLab-通知-Jenkins-部署" class="headerlink" title="GitLab 通知 Jenkins 部署"></a>GitLab 通知 Jenkins 部署</h3><p>触发器参考：<a href="http://blog.weixinote.com/2018/06/10/Gitlab-%E6%8F%90%E4%BA%A4%E4%BB%A3%E7%A0%81%E8%A7%A6%E5%8F%91-Jenkins-%E9%83%A8%E7%BD%B2/" target="_blank" rel="noopener">Gitlab-提交代码触发-Jenkins-部署</a></p>
+<h3 id="Jenkins-安装-GitLab、Ansible-插件"><a href="#Jenkins-安装-GitLab、Ansible-插件" class="headerlink" title="Jenkins 安装 GitLab、Ansible 插件"></a>Jenkins 安装 GitLab、Ansible 插件</h3><ul>
+<li>安装插件的路径：系统管理 –&gt; 插件管理</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/09/24/Devops-基于-Gitlab-Jenkins-Ansible-Supervisor实现Go项目自动化部署/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://weixinote.com/2018/09/24/Devops-应用进程管理工具-supervisord/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1695,166 +1857,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://weixinote.com/2018/08/01/Go-教程系列笔记-缓冲通道和工作池/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Leon Xu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="维系笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/01/Go-教程系列笔记-缓冲通道和工作池/" itemprop="url">[Go 教程系列笔记] 缓冲通道和工作池</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T15:19:31+08:00">
-                2018-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Go/" itemprop="url" rel="index">
-                    <span itemprop="name">Go</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/08/01/Go-教程系列笔记-缓冲通道和工作池/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/08/01/Go-教程系列笔记-缓冲通道和工作池/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>我们在上一个教程中讨论的所有通道基本上都是无缓冲的。正如我们在通道教程中详细讨论的那样，发送和接收无缓冲的通道都是阻塞的。</p>
-<p>可以使用缓冲区创建通道。仅当缓冲区已满时才会阻塞对缓冲通道的发送。类似地，仅当缓冲区为空才阻塞从缓冲通道接收。</p>
-<p>可以通过将额外的容量参数传递给 <code>make</code> 指定缓冲区大小的函数来创建缓冲通道。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch := make(chan type, capacity)</span><br></pre></td></tr></table></figure>
-<p>对于具有缓冲区的通道，上述语法中的容量应大于0。默认情况下，无缓冲通道的容量为0。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/08/01/Go-教程系列笔记-缓冲通道和工作池/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1905,7 +1907,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1927,7 +1929,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
