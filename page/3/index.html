@@ -375,7 +375,8 @@
 
       
         
-          <h3 id="什么是-select-？"><a href="#什么是-select-？" class="headerlink" title="什么是 select ？"></a>什么是 select ？</h3><p><code>select</code> 语句用于从多个<strong>发送/接收</strong>操作通道中进行选择。select 语句将阻塞，直到其中一个发送/接收操作准备就绪。如果多个操作都准备好，则随机选择其中一个操作。语法类似 <code>switch</code> 除了每个 case 语句都是通道操作。</p>
+          <h3 id="什么是-select-？"><a href="#什么是-select-？" class="headerlink" title="什么是 select ？"></a>什么是 select ？</h3><p><code>select</code> 语句用于从多个<strong>发送/接收</strong>操作通道中进行选择。select 语句是阻塞的，直到其中一个发送/接收操作准备就绪。如果多个操作都准备好，则随机选择其中一个操作。语法类似 <code>switch</code> 除了每个 case 语句都是通道操作。</p>
+<p>下面让我们来看一个例子以便更好的理解。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/08/01/Go-教程系列笔记-Select/#more" rel="contents">
@@ -532,9 +533,9 @@
       
         
           <p>我们在上一个教程中讨论的所有通道基本上都是无缓冲的。正如我们在通道教程中详细讨论的那样，发送和接收无缓冲的通道都是阻塞的。</p>
-<p>可以使用缓冲区创建通道。仅当缓冲区已满时才会阻塞对缓冲通道的发送。类似地，仅当缓冲区为空才阻塞从缓冲通道接收。</p>
+<p>可以创建带缓冲区的通道。仅当缓冲区已满时才会阻塞对缓冲通道的发送。类似地，仅当缓冲区为空才阻塞从缓冲通道接收。</p>
 <p>可以通过将额外的容量参数传递给 <code>make</code> 指定缓冲区大小的函数来创建缓冲通道。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch := make(chan type, capacity)</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">type</span>, capacity)</span><br></pre></td></tr></table></figure>
 <p>对于具有缓冲区的通道，上述语法中的容量应大于0。默认情况下，无缓冲通道的容量为0。</p>
           <!--noindex-->
           <div class="post-button text-center">
@@ -693,6 +694,9 @@
         
           <p>在上一个教程中，我们讨论了如何使用 goroutine 在 Go 中实现并发。在本教程中，我们将讨论有关通道以及 goroutine 如何使用通道进行通信。</p>
 <h3 id="什么是通道？"><a href="#什么是通道？" class="headerlink" title="什么是通道？"></a>什么是通道？</h3><p>通道可以被认为是 goroutine 通信的通道。类似于水在管道中从一端流向另一端的方式，数据可以从一端发送，另一端使用通道接收。</p>
+<h3 id="声明通道"><a href="#声明通道" class="headerlink" title="声明通道"></a>声明通道</h3><p>每个通道都有一个与之关联的类型。此类型是允许通道传输的数据类型。不允许使用该通道传输其他类型。</p>
+<p><code>chan T</code> 是一种类型为 T 的通道。</p>
+<p>通道的零值是 <code>nil</code>。<code>nil</code> 通道是没有任何用处，因此必须使用 <code>make</code> 类似于 <code>map</code> 和 <code>slice</code> 来定义通道。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/08/01/Go-教程系列笔记-Channel-通道/#more" rel="contents">
@@ -850,7 +854,7 @@
         
           <p>在上一章中，我们讨论了并发性以及它与并行性的不同之处。在本章中，我们将讨论如何使用 goroutine 在 Go中实现并发。</p>
 <h3 id="什么是-goroutine？"><a href="#什么是-goroutine？" class="headerlink" title="什么是 goroutine？"></a>什么是 goroutine？</h3><p>goroutine 可以被认为是轻量级线程。与线程相比，创建 goroutine 的成本很小。因此，Go 应用程序通常会同时运行数千个 goroutine。</p>
-<p>goroutine 也被称为<strong>协程</strong>，协程的函数或方法与其他函数或方法是同时运行。</p>
+<p>goroutine 也被称为<strong>协程</strong>，<strong>协程的函数或方法与其他函数或方法是同时运行。</strong></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/07/31/Go-教程系列笔记-goroutine（协程）/#more" rel="contents">
@@ -1008,7 +1012,9 @@
         
           <p>Go 是一种并发语言，而不是并行语言。在讨论如何在Go中处理并发之前，我们必须首先了解什么是并发以及它和并行性的区别。</p>
 <h3 id="什么是并发？"><a href="#什么是并发？" class="headerlink" title="什么是并发？"></a>什么是并发？</h3><p>并发是一次处理大量事情的能力。举个例子：</p>
+<blockquote>
 <p>让我们假设一个人慢跑。在他早晨慢跑时，他的鞋带解开了。现在这个人停止跑步，把鞋带帮好，然后又开始跑步。这就是并发的典型示例。这个人能够处理跑步和绑鞋带，也就是说，这个人能够同时处理很多事情。</p>
+</blockquote>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/07/31/Go-教程系列笔记-并发介绍/#more" rel="contents">
@@ -1164,8 +1170,8 @@
 
       
         
-          <h3 id="使用指针接收器和值接收器实现接口"><a href="#使用指针接收器和值接收器实现接口" class="headerlink" title="使用指针接收器和值接收器实现接口"></a>使用指针接收器和值接收器实现接口</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">type Describer interface &#123;</span><br><span class="line">	Describe()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Person struct &#123;</span><br><span class="line">	name string</span><br><span class="line">	age int</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (p Person) Describe() &#123; // value receiver</span><br><span class="line">	fmt.Printf(&quot;%s is %d years old\n&quot;, p.name, p.age)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Address struct &#123;</span><br><span class="line">	state string</span><br><span class="line">	country string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (a *Address) Describe() &#123; // pointer receiver</span><br><span class="line">	fmt.Printf(&quot;State %s Country %s&quot;, a.state, a.country)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	var d1 Describer</span><br><span class="line">	p1 := Person&#123;&quot;Sam&quot;, 25&#125;</span><br><span class="line">	d1 = p1</span><br><span class="line">	d1.Describe()</span><br><span class="line"></span><br><span class="line">	p2 := Person&#123;&quot;James&quot;, 32&#125;</span><br><span class="line">	d1 = &amp;p2</span><br><span class="line">	d1.Describe()</span><br><span class="line"></span><br><span class="line">	////----------------</span><br><span class="line"></span><br><span class="line">	var d2 Describer</span><br><span class="line">	a := Address&#123;&quot;Washington&quot;, &quot;USA&quot;&#125;</span><br><span class="line"></span><br><span class="line">	// Cannot use a (type Address) as type Describe in assignment</span><br><span class="line">	//d2 = a</span><br><span class="line">  // 在赋值时不能使用（Address 类型）作为 Describe 类型，Address 没有实现 Describe</span><br><span class="line"></span><br><span class="line">	d2 = &amp;a</span><br><span class="line"></span><br><span class="line">	d2.Describe()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>第一部分总结：带值接受器的方法同时接受指针和值类型的调用</p>
+          <h3 id="使用指针接收器和值接收器实现接口"><a href="#使用指针接收器和值接收器实现接口" class="headerlink" title="使用指针接收器和值接收器实现接口"></a>使用指针接收器和值接收器实现接口</h3><p>我们在第1部分中讨论的所有示例接口都是使用值接收器实现的。也可以使用指针接收器实现接口。在使用指针接收器实现接口时需要注意一些细微之处。让我们了解使用以下程序。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Describer <span class="keyword">interface</span> &#123;</span><br><span class="line">	Describe()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Person <span class="keyword">struct</span> &#123;</span><br><span class="line">	name <span class="keyword">string</span></span><br><span class="line">	age <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p Person)</span> <span class="title">Describe</span><span class="params">()</span></span> &#123; <span class="comment">// value receiver</span></span><br><span class="line">	fmt.Printf(<span class="string">"%s is %d years old\n"</span>, p.name, p.age)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Address <span class="keyword">struct</span> &#123;</span><br><span class="line">	state <span class="keyword">string</span></span><br><span class="line">	country <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a *Address)</span> <span class="title">Describe</span><span class="params">()</span></span> &#123; <span class="comment">// pointer receiver</span></span><br><span class="line">	fmt.Printf(<span class="string">"State %s Country %s"</span>, a.state, a.country)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> d1 Describer</span><br><span class="line">	p1 := Person&#123;<span class="string">"Sam"</span>, <span class="number">25</span>&#125;</span><br><span class="line">	d1 = p1</span><br><span class="line">	d1.Describe()</span><br><span class="line"></span><br><span class="line">	p2 := Person&#123;<span class="string">"James"</span>, <span class="number">32</span>&#125;</span><br><span class="line">	d1 = &amp;p2</span><br><span class="line">	d1.Describe()</span><br><span class="line"></span><br><span class="line">	<span class="comment">////----------------</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> d2 Describer</span><br><span class="line">	a := Address&#123;<span class="string">"Washington"</span>, <span class="string">"USA"</span>&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Cannot use a (type Address) as type Describe in assignment</span></span><br><span class="line">	<span class="comment">//d2 = a</span></span><br><span class="line">  <span class="comment">// 在赋值时不能使用（Address 类型）作为 Describe 类型，Address 没有实现 Describe</span></span><br><span class="line"></span><br><span class="line">	d2 = &amp;a</span><br><span class="line"></span><br><span class="line">	d2.Describe()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/07/26/Go-教程系列笔记-Interface-第二部分/#more" rel="contents">
@@ -1321,7 +1327,7 @@
 
       
         
-          <h3 id="什么是接口？"><a href="#什么是接口？" class="headerlink" title="什么是接口？"></a>什么是接口？</h3><p>面向对象世界中的接口一般定义为“<strong>接口定义对象的行为</strong>”。它只指定对象应该做什么？实现此行为（实现细节）的方法取决于对象。</p>
+          <h3 id="什么是接口？"><a href="#什么是接口？" class="headerlink" title="什么是接口？"></a>什么是接口？</h3><p>面向对象世界中的接口一般定义是“<strong>接口定义对象的行为</strong>”。它只指定对象应该做什么？实现此行为（实现细节）的方法取决于对象。</p>
 <p>在 Go 中，接口是一组方法签名。当一个类型为接口中的所有方法提供了定义时，就说它实现了接口。它和 OOP 世界非常相似。接口指定类型应具有的方法，类型决定如何实现这些方法。</p>
 <p>例如：<code>WashingMachine</code> 可以是具有方法签名 <code>Cleaning()</code> 和 <code>Drying()</code> 的接口。任何为 <code>Cleaning</code> 和 <code>Drying</code> 提供定义的类型都可以说实现了 <code>WashingMachine</code>。</p>
           <!--noindex-->
@@ -1932,7 +1938,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

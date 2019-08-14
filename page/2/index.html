@@ -1826,6 +1826,8 @@
         
           <p>在本教程中，我们将了解互斥锁。我们还将学习如何使用互斥锁和通道解决竞争问题。</p>
 <h3 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h3><p>在讲互斥锁之前，了解并发编程中<strong>临界区</strong>的概念非常重要。当程序同时运行时，多个 goroutine 同时访问修改共享资源，修改共享资源的这段代码称为<strong>临界区</strong>。例如，假设我们要将变量 x 递增1.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x = x + 1</span><br></pre></td></tr></table></figure>
+<p>只要上面的代码被一个 goroutine 访问，就不会有任何问题。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/08/01/Go-教程系列笔记-Mutex（互斥锁）/#more" rel="contents">
@@ -1938,7 +1940,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

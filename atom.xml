@@ -554,12 +554,14 @@
     <link href="https://weixinote.com/2018/08/01/Go-%E6%95%99%E7%A8%8B%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0-Mutex%EF%BC%88%E4%BA%92%E6%96%A5%E9%94%81%EF%BC%89/"/>
     <id>https://weixinote.com/2018/08/01/Go-教程系列笔记-Mutex（互斥锁）/</id>
     <published>2018-08-01T10:06:37.000Z</published>
-    <updated>2018-12-17T08:51:23.789Z</updated>
+    <updated>2019-08-14T07:10:39.560Z</updated>
     
     <summary type="html">
     
       &lt;p&gt;在本教程中，我们将了解互斥锁。我们还将学习如何使用互斥锁和通道解决竞争问题。&lt;/p&gt;
 &lt;h3 id=&quot;临界区&quot;&gt;&lt;a href=&quot;#临界区&quot; class=&quot;headerlink&quot; title=&quot;临界区&quot;&gt;&lt;/a&gt;临界区&lt;/h3&gt;&lt;p&gt;在讲互斥锁之前，了解并发编程中&lt;strong&gt;临界区&lt;/strong&gt;的概念非常重要。当程序同时运行时，多个 goroutine 同时访问修改共享资源，修改共享资源的这段代码称为&lt;strong&gt;临界区&lt;/strong&gt;。例如，假设我们要将变量 x 递增1.&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;x = x + 1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;只要上面的代码被一个 goroutine 访问，就不会有任何问题。&lt;/p&gt;
     
     </summary>
     
@@ -567,6 +569,8 @@
     
     
       <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
+    
+      <category term="Go教程系列笔记" scheme="https://weixinote.com/tags/Go%E6%95%99%E7%A8%8B%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
