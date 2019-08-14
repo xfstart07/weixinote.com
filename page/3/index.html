@@ -273,6 +273,492 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://weixinote.com/2018/08/09/使用-docker-运行-NSQ/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leon Xu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="维系笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/09/使用-docker-运行-NSQ/" itemprop="url">使用 docker 运行 NSQ</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-09T15:36:25+08:00">
+                2018-08-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/MQ/" itemprop="url" rel="index">
+                    <span itemprop="name">MQ</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/09/使用-docker-运行-NSQ/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/08/09/使用-docker-运行-NSQ/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="下载容器"><a href="#下载容器" class="headerlink" title="下载容器"></a>下载容器</h3><p>首先pull一个nsq的镜像</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull nsqio/nsq</span><br></pre></td></tr></table></figure>
+<h3 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h3><p>1）运行docker容器lookupd</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># docker run -d --name nsqlookupd -p 4160:4160 -p 4161:4161 nsqio/nsq /nsqlookupd</span><br><span class="line">f37732ecb5a667da072bbdb132c0f7d616dca528885202152592267ac2a2cbdc</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>-d</code> 以守护进程的方式运行</li>
+<li><code>--name lookupd</code> 容器名称为 lookup</li>
+<li><code>-p 4160:4160 -p 4161:4161</code> 绑定端口</li>
+<li><code>nsqio/nsq</code> 镜像名称</li>
+<li><code>/nsqlookupd</code> 运行命令</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/08/09/使用-docker-运行-NSQ/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://weixinote.com/2018/08/09/使用命令行运行-NSQ/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leon Xu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="维系笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/09/使用命令行运行-NSQ/" itemprop="url">[MQ] 使用命令行运行 NSQ</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-09T15:32:19+08:00">
+                2018-08-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/MQ/" itemprop="url" rel="index">
+                    <span itemprop="name">MQ</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/09/使用命令行运行-NSQ/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/08/09/使用命令行运行-NSQ/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><strong>下载</strong></p>
+<p>当前(20180809)版本: 1.0.0-compat</p>
+<p>mac: <a href="https://s3.amazonaws.com/bitly-downloads/nsq/nsq-1.0.0-compat.darwin-amd64.go1.8.tar.gz" target="_blank" rel="noopener">https://s3.amazonaws.com/bitly-downloads/nsq/nsq-1.0.0-compat.darwin-amd64.go1.8.tar.gz</a></p>
+<p>linux: <a href="https://s3.amazonaws.com/bitly-downloads/nsq/nsq-1.0.0-compat.linux-amd64.go1.8.tar.gz" target="_blank" rel="noopener">https://s3.amazonaws.com/bitly-downloads/nsq/nsq-1.0.0-compat.linux-amd64.go1.8.tar.gz</a></p>
+<p><strong>解压</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar xvf nsq.tar.gz</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/08/09/使用命令行运行-NSQ/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://weixinote.com/2018/08/01/Go-教程系列笔记-Mutex（互斥锁）/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leon Xu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="维系笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/01/Go-教程系列笔记-Mutex（互斥锁）/" itemprop="url">[Go 教程系列笔记] Mutex（互斥锁）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T18:06:37+08:00">
+                2018-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index">
+                    <span itemprop="name">Go</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/08/01/Go-教程系列笔记-Mutex（互斥锁）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/08/01/Go-教程系列笔记-Mutex（互斥锁）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在本教程中，我们将了解互斥锁。我们还将学习如何使用互斥锁和通道解决竞争问题。</p>
+<h3 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h3><p>在讲互斥锁之前，了解并发编程中<strong>临界区</strong>的概念非常重要。当程序同时运行时，多个 goroutine 同时访问修改共享资源，修改共享资源的这段代码称为<strong>临界区</strong>。例如，假设我们要将变量 x 递增1.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x = x + 1</span><br></pre></td></tr></table></figure>
+<p>只要上面的代码被一个 goroutine 访问，就不会有任何问题。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/08/01/Go-教程系列笔记-Mutex（互斥锁）/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://weixinote.com/2018/08/01/Go-教程系列笔记-Select/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1370,502 +1856,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://weixinote.com/2018/07/06/Issue-记一次文件打开数问题/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Leon Xu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="维系笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/06/Issue-记一次文件打开数问题/" itemprop="url">Issue 记一次文件打开数问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-06T14:40:08+08:00">
-                2018-07-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/项目/" itemprop="url" rel="index">
-                    <span itemprop="name">项目</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/07/06/Issue-记一次文件打开数问题/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/06/Issue-记一次文件打开数问题/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>最近新上线了一个应用，上线之后跑了2天发现出现错误，一直的报 <code>too many open files</code>。</p>
-<p>那么程序设置的最大文件数是多少呢？可以通过 <code>proc limit</code> 查看：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># cat /proc/&lt;pid&gt;/limits</span><br><span class="line">Limit                     Soft Limit           Hard Limit           Units</span><br><span class="line">Max cpu time              unlimited            unlimited            seconds</span><br><span class="line">Max file size             unlimited            unlimited            bytes</span><br><span class="line">Max data size             unlimited            unlimited            bytes</span><br><span class="line">Max stack size            8388608              unlimited            bytes</span><br><span class="line">Max core file size        unlimited            unlimited            bytes</span><br><span class="line">Max resident set          unlimited            unlimited            bytes</span><br><span class="line">Max processes             100000               100000               processes</span><br><span class="line">Max open files            1024                 4096                 files</span><br><span class="line">Max locked memory         65536                65536                bytes</span><br><span class="line">Max address space         unlimited            unlimited            bytes</span><br><span class="line">Max file locks            unlimited            unlimited            locks</span><br><span class="line">Max pending signals       29837                29837                signals</span><br><span class="line">Max msgqueue size         819200               819200               bytes</span><br><span class="line">Max nice priority         0                    0</span><br><span class="line">Max realtime priority     0                    0</span><br><span class="line">Max realtime timeout      unlimited            unlimited            us</span><br></pre></td></tr></table></figure>
-<p>其中<code>Max open files</code>中最大的软连限制是<code>1024</code>，硬连限制是<code>4096</code>，用命令查了一下进程的文件打开数，发现超过了 1024。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># ls -l /proc/&lt;pid&gt;/fd |wc -l</span><br><span class="line">1025</span><br></pre></td></tr></table></figure>
-<p>还可以查看程序都打开了哪些文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># ls -l /proc/&lt;pid&gt;/fd</span><br></pre></td></tr></table></figure>
-<p>通过修改在 <code>/etc/security/limits.d/</code> 中的配置：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">*     soft   nofile    65535</span><br><span class="line">*     hard   nofile    65535</span><br><span class="line">*     soft   nproc     65535</span><br><span class="line">*     hard   nproc     65535</span><br><span class="line">*     soft   core      65535</span><br><span class="line">*     hard   core      65535</span><br></pre></td></tr></table></figure>
-<p>然后重启，查看系统的配置：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"><span class="built_in">ulimit</span> -n</span></span><br><span class="line">65535</span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"><span class="built_in">ulimit</span> -a</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">ulimit</span> -a</span></span><br><span class="line">core file size          (blocks, -c) 0</span><br><span class="line">data seg size           (kbytes, -d) unlimited</span><br><span class="line">scheduling priority             (-e) 0</span><br><span class="line">file size               (blocks, -f) unlimited</span><br><span class="line">pending signals                 (-i) 15090</span><br><span class="line">max locked memory       (kbytes, -l) 64</span><br><span class="line">max memory size         (kbytes, -m) unlimited</span><br><span class="line">open files                      (-n) 65535</span><br><span class="line">pipe size            (512 bytes, -p) 8</span><br><span class="line">POSIX message queues     (bytes, -q) 819200</span><br><span class="line">real-time priority              (-r) 0</span><br><span class="line">stack size              (kbytes, -s) 8192</span><br><span class="line">cpu time               (seconds, -t) unlimited</span><br><span class="line">max user processes              (-u) 15090</span><br><span class="line">virtual memory          (kbytes, -v) unlimited</span><br><span class="line">file locks                      (-x) unlimited</span><br></pre></td></tr></table></figure>
-<p>配置已经生效，这个时候重现跑了一下连接测试，发现程序还是超过 1024 之后报错，使用命令 <code>cat /proc/&lt;pid&gt;/limits</code> 查看程序的文件数还是 1024。这是为什么呢？</p>
-<p>原来程序是跑在 centos7 上的，而上面的方法是针对 centos5/6 的，在 centos7 使用的初始化系统的守护进程工具是 <code>systemd</code>，所有需要修改 <code>systemd</code> 的配置。</p>
-<p><code>systemd</code> 的配置文件路径 <code>/etc/systemd/system.conf</code>：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DefaultLimitCORE=infinity</span><br><span class="line">DefaultLimitNOFILE=65535</span><br><span class="line">DefaultLimitNPROC=65535</span><br></pre></td></tr></table></figure>
-<p>然后重启。再查看 <code>cat /proc/&lt;pid&gt;/limits</code> 发现程序的最大文件数已经生效为 65535，这个时候在跑程序就没有报 <code>too many open files</code> 了。</p>
-<h3 id="查问题时使用到的命令"><a href="#查问题时使用到的命令" class="headerlink" title="查问题时使用到的命令"></a>查问题时使用到的命令</h3><h4 id="lsof"><a href="#lsof" class="headerlink" title="lsof"></a>lsof</h4><p>根据程序的端口列出打开文件信息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsof -i :8008</span><br></pre></td></tr></table></figure>
-<p>-i 根据端口查询<br>-p 根据pid 进程号查询</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsof -p 15008</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsof -n|awk &apos;&#123;print $2&#125;&apos;|sort|uniq -c|sort -nr|more</span><br></pre></td></tr></table></figure>
-<p>查看每个进程PID的句柄数</p>
-<h4 id="wc"><a href="#wc" class="headerlink" title="wc"></a>wc</h4><p>统计行数，通过管道配合其他命令一起使用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsof -i :8008 |wc -l</span><br></pre></td></tr></table></figure>
-<h4 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$netstat -n | awk &apos;/^tcp/ &#123;++S[$NF]&#125; END &#123;for(a in S) print a, S[a]&#125;&apos;</span><br><span class="line">ESTABLISHED 5</span><br><span class="line">SYN_SENT 1</span><br><span class="line">TIME_WAIT 12</span><br></pre></td></tr></table></figure>
-<p>查看每种连接状态的连接数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -nat | grep ip |grep TIME_WAIT</span><br></pre></td></tr></table></figure>
-<p>查看具体IP的 TIME_WAIT 情况</p>
-<h2 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h2><p><a href="https://huoding.com/2015/08/02/460" target="_blank" rel="noopener">https://huoding.com/2015/08/02/460</a><br><a href="https://www.jianshu.com/p/2e6748c4c0b7" target="_blank" rel="noopener">https://www.jianshu.com/p/2e6748c4c0b7</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://weixinote.com/2018/07/05/Docker-启动-RabbitMQ/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Leon Xu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="维系笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/05/Docker-启动-RabbitMQ/" itemprop="url">Docker 启动 RabbitMQ</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-05T10:08:37+08:00">
-                2018-07-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/MQ/" itemprop="url" rel="index">
-                    <span itemprop="name">MQ</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/07/05/Docker-启动-RabbitMQ/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/05/Docker-启动-RabbitMQ/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>拉取 RabbitMQ</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull rabbitmq</span><br></pre></td></tr></table></figure>
-<p>启动 RabbitMQ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --hostname rabbit01 --name rabbit -p 15672:15672 -p 5672:5672 rabbitmq:management</span><br></pre></td></tr></table></figure>
-<p><code>-d</code> 以守护进程方式启动<br><code>--hostname rabbit01</code> 设置 RabbitMQ 的主机名称。<br><code>--name rabbit</code> 定义 RabbitMQ 容器名称<br><code>-p 15672:15672</code> 将容器的端口映射到本机 15672 端口（RabbitMQ 的 web 端口）。<br><code>-p 5672:5672</code> RabbitMQ 服务端口</p>
-<p>最后指定了安装 RabbitMQ 的 Web管理插件版本：<code>rabbitmq:management</code></p>
-<p>打开浏览器输入：<a href="http://localhost:15672" target="_blank" rel="noopener">http://localhost:15672</a> 可以看到 RabbitMQ 已经安装并启动起来了，使用默认的 <code>guest:guest</code> 用户名密码登录。</p>
-<p>发送使用 <code>amqp://guest:guest@localhost:5672/</code></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://weixinote.com/2018/07/04/AMQP-0-9-1-模型说明/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Leon Xu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="维系笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/04/AMQP-0-9-1-模型说明/" itemprop="url">AMQP 0-9-1 模型说明</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-04T17:58:38+08:00">
-                2018-07-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/MQ/" itemprop="url" rel="index">
-                    <span itemprop="name">MQ</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/07/04/AMQP-0-9-1-模型说明/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/07/04/AMQP-0-9-1-模型说明/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="关于这个指南"><a href="#关于这个指南" class="headerlink" title="关于这个指南"></a>关于这个指南</h3><p>这个指南提供了概述 AMQP 0-9-1 协议。RabbitMQ 支持的协议之一。</p>
-<h3 id="AMQP-0-9-1-是什么？"><a href="#AMQP-0-9-1-是什么？" class="headerlink" title="AMQP 0-9-1 是什么？"></a>AMQP 0-9-1 是什么？</h3><p>AMQP 0-9-1 (高级消息队列协议)是一个消息协议，它符合客户端应用和消息中间代理进行通信。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/07/04/AMQP-0-9-1-模型说明/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1916,7 +1906,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

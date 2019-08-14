@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Go,Go教程系列笔记,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="维系笔记" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="Go不支持继承，但它确实支持组合。组合的通用定义是“放在一起”。组合的一个例子是汽车。汽车由车轮，发动机和各种其他部件组成。 通过嵌入结构组成Go中的组合可以通过将一种结构类型嵌入到另一种结构类型中来实现。 博客文章是一个完美的组合示例。每篇博文都有标题，内容和作者信息。这可以使用组合完美地表示。在本教程的后续步骤中，我们将了解如何完成此操作。">
+<meta name="keywords" content="Go,Go教程系列笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[Go 教程系列笔记]组合而不是继承-Go中的OOP">
+<meta property="og:url" content="https://weixinote.com/2019/08/14/Go-教程系列笔记-组合而不是继承-Go中的OOP/index.html">
+<meta property="og:site_name" content="维系笔记">
+<meta property="og:description" content="Go不支持继承，但它确实支持组合。组合的通用定义是“放在一起”。组合的一个例子是汽车。汽车由车轮，发动机和各种其他部件组成。 通过嵌入结构组成Go中的组合可以通过将一种结构类型嵌入到另一种结构类型中来实现。 博客文章是一个完美的组合示例。每篇博文都有标题，内容和作者信息。这可以使用组合完美地表示。在本教程的后续步骤中，我们将了解如何完成此操作。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-08-14T07:38:02.047Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[Go 教程系列笔记]组合而不是继承-Go中的OOP">
+<meta name="twitter:description" content="Go不支持继承，但它确实支持组合。组合的通用定义是“放在一起”。组合的一个例子是汽车。汽车由车轮，发动机和各种其他部件组成。 通过嵌入结构组成Go中的组合可以通过将一种结构类型嵌入到另一种结构类型中来实现。 博客文章是一个完美的组合示例。每篇博文都有标题，内容和作者信息。这可以使用组合完美地表示。在本教程的后续步骤中，我们将了解如何完成此操作。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://weixinote.com/2019/08/14/Go-教程系列笔记-组合而不是继承-Go中的OOP/">
+
+
+
+
+
+  <title>[Go 教程系列笔记]组合而不是继承-Go中的OOP | 维系笔记</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-123195177-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">维系笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">连接过去、现在、未来</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://weixinote.com/2019/08/14/Go-教程系列笔记-组合而不是继承-Go中的OOP/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leon Xu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="维系笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">[Go 教程系列笔记]组合而不是继承-Go中的OOP</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-14T15:37:16+08:00">
+                2019-08-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index">
+                    <span itemprop="name">Go</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/08/14/Go-教程系列笔记-组合而不是继承-Go中的OOP/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/08/14/Go-教程系列笔记-组合而不是继承-Go中的OOP/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Go不支持继承，但它确实支持组合。组合的通用定义是“放在一起”。组合的一个例子是汽车。汽车由车轮，发动机和各种其他部件组成。</p>
+<h3 id="通过嵌入结构组成"><a href="#通过嵌入结构组成" class="headerlink" title="通过嵌入结构组成"></a>通过嵌入结构组成</h3><p>Go中的组合可以通过将一种结构类型嵌入到另一种结构类型中来实现。</p>
+<p>博客文章是一个完美的组合示例。每篇博文都有标题，内容和作者信息。这可以使用组合完美地表示。在本教程的后续步骤中，我们将了解如何完成此操作。</p>
+<a id="more"></a>
+<p>让我们首先创建<code>author</code>结构。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> author <span class="keyword">struct</span> &#123;  </span><br><span class="line">    firstName <span class="keyword">string</span></span><br><span class="line">    lastName  <span class="keyword">string</span></span><br><span class="line">    bio       <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a author)</span> <span class="title">fullName</span><span class="params">()</span> <span class="title">string</span></span> &#123;  </span><br><span class="line">    <span class="keyword">return</span> fmt.Sprintf(<span class="string">"%s %s"</span>, a.firstName, a.lastName)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的代码片段中，我们创建了一个author带字段的结构，firstName，lastName和bio。我们还添加了一个<code>fullName()</code>带有<code>author</code>接收器类型的方法，它返回作者的全名。</p>
+<p>下一步是创建<code>post</code>结构。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> post <span class="keyword">struct</span> &#123;  </span><br><span class="line">    title     <span class="keyword">string</span></span><br><span class="line">    content   <span class="keyword">string</span></span><br><span class="line">    author</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p post)</span> <span class="title">details</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    fmt.Println(<span class="string">"Title: "</span>, p.title)</span><br><span class="line">    fmt.Println(<span class="string">"Content: "</span>, p.content)</span><br><span class="line">    fmt.Println(<span class="string">"Author: "</span>, p.author.fullName())</span><br><span class="line">    fmt.Println(<span class="string">"Bio: "</span>, p.author.bio)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>post</code>结构有字段 title，content。它还有一个嵌入式匿名字段<code>author</code>。该字段表示<code>post</code>结构由<code>author</code>组成。现在<code>post</code>结构可以访问<code>author</code>结构的所有字段和方法。我们还在<code>post</code>结构中添加了details()方法，用于打印作者的标题，内容，完整名称和生物。</p>
+<p>每当一个struct字段嵌入另一个struct时，Go为我们提供了访问嵌入字段的选项，就好像它们是外部结构的一部分一样。这意味着<code>p.author.fullName()</code>在行中没有。上面的代码第 10 行中可以替换为<code>p.fullName()</code>。因此，该details()方法可以重写如下，</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p post)</span> <span class="title">details</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    fmt.Println(<span class="string">"Title: "</span>, p.title)</span><br><span class="line">    fmt.Println(<span class="string">"Content: "</span>, p.content)</span><br><span class="line">    fmt.Println(<span class="string">"Author: "</span>, p.fullName())</span><br><span class="line">    fmt.Println(<span class="string">"Bio: "</span>, p.bio)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现在我们已经准备好author和post结构，让我们通过创建一个博客文章来完成这个程序。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> author <span class="keyword">struct</span> &#123;  </span><br><span class="line">    firstName <span class="keyword">string</span></span><br><span class="line">    lastName  <span class="keyword">string</span></span><br><span class="line">    bio       <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a author)</span> <span class="title">fullName</span><span class="params">()</span> <span class="title">string</span></span> &#123;  </span><br><span class="line">    <span class="keyword">return</span> fmt.Sprintf(<span class="string">"%s %s"</span>, a.firstName, a.lastName)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> post <span class="keyword">struct</span> &#123;  </span><br><span class="line">    title   <span class="keyword">string</span></span><br><span class="line">    content <span class="keyword">string</span></span><br><span class="line">    author</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p post)</span> <span class="title">details</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    fmt.Println(<span class="string">"Title: "</span>, p.title)</span><br><span class="line">    fmt.Println(<span class="string">"Content: "</span>, p.content)</span><br><span class="line">    fmt.Println(<span class="string">"Author: "</span>, p.fullName())</span><br><span class="line">    fmt.Println(<span class="string">"Bio: "</span>, p.bio)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    author1 := author&#123;</span><br><span class="line">        <span class="string">"Naveen"</span>,</span><br><span class="line">        <span class="string">"Ramanathan"</span>,</span><br><span class="line">        <span class="string">"Golang Enthusiast"</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    post1 := post&#123;</span><br><span class="line">        <span class="string">"Inheritance in Go"</span>,</span><br><span class="line">        <span class="string">"Go supports composition instead of inheritance"</span>,</span><br><span class="line">        author1,</span><br><span class="line">    &#125;</span><br><span class="line">    post1.details()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://play.golang.org/p/sskWaTpJgr" target="_blank" rel="noopener">Run in playground</a></p>
+<p>上面程序中的主要功能是在第31行号中创建一个新作者。在第36行创建一个新文章。并嵌入式<code>author</code>。这个程序打印。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Title:  Inheritance in Go  </span><br><span class="line">Content:  Go supports composition instead of inheritance  </span><br><span class="line">Author:  Naveen Ramanathan  </span><br><span class="line">Bio:  Golang Enthusiast</span><br></pre></td></tr></table></figure>
+<h3 id="嵌入-slice-结构"><a href="#嵌入-slice-结构" class="headerlink" title="嵌入 slice 结构"></a>嵌入 slice 结构</h3><p>我们可以把这个例子进一步修改，创建使用一个网站有一系列博客文章:)。</p>
+<p>让我们先定义<code>website</code>结构。请在现有程序的主要功能上方添加以下代码并运行它。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> website <span class="keyword">struct</span> &#123;  </span><br><span class="line">        []post</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(w website)</span> <span class="title">contents</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    fmt.Println(<span class="string">"Contents of Website\n"</span>)</span><br><span class="line">    <span class="keyword">for</span> _, v := <span class="keyword">range</span> w.posts &#123;</span><br><span class="line">        v.details()</span><br><span class="line">        fmt.Println()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在添加上面的代码后运行上面的程序时，编译器会抱怨以下错误，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">main.go:31:9: syntax error: unexpected [, expecting field name or embedded type</span><br></pre></td></tr></table></figure>
+<p>此错误指向嵌入的结构切片<code>[]post</code>。原因是不可能匿名嵌入切片。字段名称是必需的。所以让我们修复这个错误并使编译器满意。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> website <span class="keyword">struct</span> &#123;  </span><br><span class="line">        posts []post</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我已将字段名称<code>posts</code>添加到 []post。</p>
+<p>现在让我们修改<code>main.go</code>并为我们的新网站创建一些帖子。</p>
+<p>修改主要功能后的完整程序如下所示，</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> author <span class="keyword">struct</span> &#123;  </span><br><span class="line">    firstName <span class="keyword">string</span></span><br><span class="line">    lastName  <span class="keyword">string</span></span><br><span class="line">    bio       <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a author)</span> <span class="title">fullName</span><span class="params">()</span> <span class="title">string</span></span> &#123;  </span><br><span class="line">    <span class="keyword">return</span> fmt.Sprintf(<span class="string">"%s %s"</span>, a.firstName, a.lastName)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> post <span class="keyword">struct</span> &#123;  </span><br><span class="line">    title   <span class="keyword">string</span></span><br><span class="line">    content <span class="keyword">string</span></span><br><span class="line">    author</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p post)</span> <span class="title">details</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    fmt.Println(<span class="string">"Title: "</span>, p.title)</span><br><span class="line">    fmt.Println(<span class="string">"Content: "</span>, p.content)</span><br><span class="line">    fmt.Println(<span class="string">"Author: "</span>, p.fullName())</span><br><span class="line">    fmt.Println(<span class="string">"Bio: "</span>, p.bio)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> website <span class="keyword">struct</span> &#123;  </span><br><span class="line"> posts []post</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(w website)</span> <span class="title">contents</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    fmt.Println(<span class="string">"Contents of Website\n"</span>)</span><br><span class="line">    <span class="keyword">for</span> _, v := <span class="keyword">range</span> w.posts &#123;</span><br><span class="line">        v.details()</span><br><span class="line">        fmt.Println()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    author1 := author&#123;</span><br><span class="line">        <span class="string">"Naveen"</span>,</span><br><span class="line">        <span class="string">"Ramanathan"</span>,</span><br><span class="line">        <span class="string">"Golang Enthusiast"</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    post1 := post&#123;</span><br><span class="line">        <span class="string">"Inheritance in Go"</span>,</span><br><span class="line">        <span class="string">"Go supports composition instead of inheritance"</span>,</span><br><span class="line">        author1,</span><br><span class="line">    &#125;</span><br><span class="line">    post2 := post&#123;</span><br><span class="line">        <span class="string">"Struct instead of Classes in Go"</span>,</span><br><span class="line">        <span class="string">"Go does not support classes but methods can be added to structs"</span>,</span><br><span class="line">        author1,</span><br><span class="line">    &#125;</span><br><span class="line">    post3 := post&#123;</span><br><span class="line">        <span class="string">"Concurrency"</span>,</span><br><span class="line">        <span class="string">"Go is a concurrent language and not a parallel one"</span>,</span><br><span class="line">        author1,</span><br><span class="line">    &#125;</span><br><span class="line">    w := website&#123;</span><br><span class="line">        posts: []post&#123;post1, post2, post3&#125;,</span><br><span class="line">    &#125;</span><br><span class="line">    w.contents()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://play.golang.org/p/gKaa0RbeAE" target="_blank" rel="noopener">Run in playground</a></p>
+<p>在上面的<code>main.go</code>中，我们创建了一个作者<code>author1</code>和三个帖子post1，post2并且post3。最后我们在第63行创建了网站 w。通过嵌入这3个帖子并在下一行显示内容。</p>
+<p>该程序将输出，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Contents of Website</span><br><span class="line"></span><br><span class="line">Title:  Inheritance in Go  </span><br><span class="line">Content:  Go supports composition instead of inheritance  </span><br><span class="line">Author:  Naveen Ramanathan  </span><br><span class="line">Bio:  Golang Enthusiast</span><br><span class="line"></span><br><span class="line">Title:  Struct instead of Classes in Go  </span><br><span class="line">Content:  Go does not support classes but methods can be added to structs  </span><br><span class="line">Author:  Naveen Ramanathan  </span><br><span class="line">Bio:  Golang Enthusiast</span><br><span class="line"></span><br><span class="line">Title:  Concurrency  </span><br><span class="line">Content:  Go is a concurrent language and not a parallel one  </span><br><span class="line">Author:  Naveen Ramanathan  </span><br><span class="line">Bio:  Golang Enthusiast</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Go/" rel="tag"># Go</a>
+          
+            <a href="/tags/Go教程系列笔记/" rel="tag"># Go教程系列笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/14/Go-教程系列笔记-结构而不是类-Go中的OOP/" rel="next" title="[Go 教程系列笔记]结构而不是类-Go中的OOP">
+                <i class="fa fa-chevron-left"></i> [Go 教程系列笔记]结构而不是类-Go中的OOP
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/08/14/Go-教程系列笔记-多态-Go中的OOP/" rel="prev" title="[Go 教程系列笔记]多态-Go中的OOP">
+                [Go 教程系列笔记]多态-Go中的OOP <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Leon Xu</p>
+              <p class="site-description motion-element" itemprop="description">专注于后端开发，Golang，Docker，Ruby</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#通过嵌入结构组成"><span class="nav-number">1.</span> <span class="nav-text">通过嵌入结构组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#嵌入-slice-结构"><span class="nav-number">2.</span> <span class="nav-text">嵌入 slice 结构</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Leon Xu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://blog-weixinote-com.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://weixinote.com/2019/08/14/Go-教程系列笔记-组合而不是继承-Go中的OOP/';
+          this.page.identifier = '2019/08/14/Go-教程系列笔记-组合而不是继承-Go中的OOP/';
+          this.page.title = '[Go 教程系列笔记]组合而不是继承-Go中的OOP';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://blog-weixinote-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

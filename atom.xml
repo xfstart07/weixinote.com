@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://weixinote.com/"/>
-  <updated>2019-08-13T01:31:36.459Z</updated>
+  <updated>2019-08-14T07:39:43.928Z</updated>
   <id>https://weixinote.com/</id>
   
   <author>
@@ -15,6 +15,79 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>[Go 教程系列笔记]多态-Go中的OOP</title>
+    <link href="https://weixinote.com/2019/08/14/Go-%E6%95%99%E7%A8%8B%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0-%E5%A4%9A%E6%80%81-Go%E4%B8%AD%E7%9A%84OOP/"/>
+    <id>https://weixinote.com/2019/08/14/Go-教程系列笔记-多态-Go中的OOP/</id>
+    <published>2019-08-14T07:39:01.000Z</published>
+    <updated>2019-08-14T07:39:43.928Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Go 中的多态性是在接口的帮助下实现的。正如我们已经讨论过的，接口可以在Go 中隐式实现。如果类型定义了接口中声明的所有方法，则类型实现接口。让我们看看在接口的帮助下如何在Go中实现多态性。&lt;/p&gt;
+&lt;h3 id=&quot;使用接口的多态性&quot;&gt;&lt;a href=&quot;#使用接口的多态性&quot; class=&quot;headerlink&quot; title=&quot;使用接口的多态性&quot;&gt;&lt;/a&gt;使用接口的多态性&lt;/h3&gt;&lt;p&gt;任何定义了接口所有方法的类型都被称为隐式实现该接口。&lt;/p&gt;
+&lt;p&gt;接口类型的变量可以包含实现接口的任何值。接口的这个属性用于在Go中实现多态。&lt;/p&gt;
+&lt;p&gt;让我们在计算组织净收入的程序的帮助下理解Go中的多态性。为简单起见，我们假设这个想象中的组织有两种项目的收入。固定账单，时间和材料。该组织的净收入按这些项目的收入总和计算。为了简化本教程，我们假设货币是美元，我们不会处理美分。它将使用int。（我建议阅读 &lt;a href=&quot;https://forum.golangbridge.org/t/what-is-the-proper-golang-equivalent-to-decimal-when-dealing-with-money/413&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://forum.golangbridge.org/t/what-is-the-proper-golang-equivalent-to-decimal-when-dealing-with-money/413&lt;/a&gt; 以了解如何处理美分。）&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
+    
+    
+      <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
+    
+      <category term="Go教程系列笔记" scheme="https://weixinote.com/tags/Go%E6%95%99%E7%A8%8B%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[Go 教程系列笔记]组合而不是继承-Go中的OOP</title>
+    <link href="https://weixinote.com/2019/08/14/Go-%E6%95%99%E7%A8%8B%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0-%E7%BB%84%E5%90%88%E8%80%8C%E4%B8%8D%E6%98%AF%E7%BB%A7%E6%89%BF-Go%E4%B8%AD%E7%9A%84OOP/"/>
+    <id>https://weixinote.com/2019/08/14/Go-教程系列笔记-组合而不是继承-Go中的OOP/</id>
+    <published>2019-08-14T07:37:16.000Z</published>
+    <updated>2019-08-14T07:38:02.047Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Go不支持继承，但它确实支持组合。组合的通用定义是“放在一起”。组合的一个例子是汽车。汽车由车轮，发动机和各种其他部件组成。&lt;/p&gt;
+&lt;h3 id=&quot;通过嵌入结构组成&quot;&gt;&lt;a href=&quot;#通过嵌入结构组成&quot; class=&quot;headerlink&quot; title=&quot;通过嵌入结构组成&quot;&gt;&lt;/a&gt;通过嵌入结构组成&lt;/h3&gt;&lt;p&gt;Go中的组合可以通过将一种结构类型嵌入到另一种结构类型中来实现。&lt;/p&gt;
+&lt;p&gt;博客文章是一个完美的组合示例。每篇博文都有标题，内容和作者信息。这可以使用组合完美地表示。在本教程的后续步骤中，我们将了解如何完成此操作。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
+    
+    
+      <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
+    
+      <category term="Go教程系列笔记" scheme="https://weixinote.com/tags/Go%E6%95%99%E7%A8%8B%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>[Go 教程系列笔记]结构而不是类-Go中的OOP</title>
+    <link href="https://weixinote.com/2019/08/14/Go-%E6%95%99%E7%A8%8B%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0-%E7%BB%93%E6%9E%84%E8%80%8C%E4%B8%8D%E6%98%AF%E7%B1%BB-Go%E4%B8%AD%E7%9A%84OOP/"/>
+    <id>https://weixinote.com/2019/08/14/Go-教程系列笔记-结构而不是类-Go中的OOP/</id>
+    <published>2019-08-14T07:34:31.000Z</published>
+    <updated>2019-08-14T07:36:36.487Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;Go-面向对象？&quot;&gt;&lt;a href=&quot;#Go-面向对象？&quot; class=&quot;headerlink&quot; title=&quot;Go 面向对象？&quot;&gt;&lt;/a&gt;Go 面向对象？&lt;/h3&gt;&lt;p&gt;Go 不是纯粹的面向对象编程语言。摘自Go的常见问题解答，回答了Go是否面向对象的问题。&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;Yes and no. Although Go has types and methods and allows an object-oriented style of programming, there is no type hierarchy. The concept of “interface” in Go provides a different approach that we believe is easy to use and in some ways more general. There are also ways to embed types in other types to provide something analogous—but not identical—to subclassing. Moreover, methods in Go are more general than in C++ or Java: they can be defined for any sort of data, even built-in types such as plain, “unboxed” integers. They are not restricted to structs (classes).&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;在接下来的教程中，我们将讨论如何使用 Go实现面向对象的编程概念。与其他面向对象的语言（如Java）相比，它们中的一些在实现上有很大不同。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
+    
+    
+      <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
+    
+      <category term="Go教程系列笔记" scheme="https://weixinote.com/tags/Go%E6%95%99%E7%A8%8B%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
   
   <entry>
     <title>golang 数据结构 2</title>
@@ -485,92 +558,6 @@
     
     
       <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用 docker 运行 NSQ</title>
-    <link href="https://weixinote.com/2018/08/09/%E4%BD%BF%E7%94%A8-docker-%E8%BF%90%E8%A1%8C-NSQ/"/>
-    <id>https://weixinote.com/2018/08/09/使用-docker-运行-NSQ/</id>
-    <published>2018-08-09T07:36:25.000Z</published>
-    <updated>2018-12-17T08:51:23.797Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;下载容器&quot;&gt;&lt;a href=&quot;#下载容器&quot; class=&quot;headerlink&quot; title=&quot;下载容器&quot;&gt;&lt;/a&gt;下载容器&lt;/h3&gt;&lt;p&gt;首先pull一个nsq的镜像&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;docker pull nsqio/nsq&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h3 id=&quot;启动容器&quot;&gt;&lt;a href=&quot;#启动容器&quot; class=&quot;headerlink&quot; title=&quot;启动容器&quot;&gt;&lt;/a&gt;启动容器&lt;/h3&gt;&lt;p&gt;1）运行docker容器lookupd&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;# docker run -d --name nsqlookupd -p 4160:4160 -p 4161:4161 nsqio/nsq /nsqlookupd&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;f37732ecb5a667da072bbdb132c0f7d616dca528885202152592267ac2a2cbdc&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-d&lt;/code&gt; 以守护进程的方式运行&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;--name lookupd&lt;/code&gt; 容器名称为 lookup&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-p 4160:4160 -p 4161:4161&lt;/code&gt; 绑定端口&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;nsqio/nsq&lt;/code&gt; 镜像名称&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;/nsqlookupd&lt;/code&gt; 运行命令&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-      <category term="MQ" scheme="https://weixinote.com/categories/MQ/"/>
-    
-    
-      <category term="Docker" scheme="https://weixinote.com/tags/Docker/"/>
-    
-      <category term="MQ" scheme="https://weixinote.com/tags/MQ/"/>
-    
-      <category term="NSQ" scheme="https://weixinote.com/tags/NSQ/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>[MQ] 使用命令行运行 NSQ</title>
-    <link href="https://weixinote.com/2018/08/09/%E4%BD%BF%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%BF%90%E8%A1%8C-NSQ/"/>
-    <id>https://weixinote.com/2018/08/09/使用命令行运行-NSQ/</id>
-    <published>2018-08-09T07:32:19.000Z</published>
-    <updated>2018-12-17T08:51:23.798Z</updated>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;安装&quot;&gt;&lt;a href=&quot;#安装&quot; class=&quot;headerlink&quot; title=&quot;安装&quot;&gt;&lt;/a&gt;安装&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;下载&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;当前(20180809)版本: 1.0.0-compat&lt;/p&gt;
-&lt;p&gt;mac: &lt;a href=&quot;https://s3.amazonaws.com/bitly-downloads/nsq/nsq-1.0.0-compat.darwin-amd64.go1.8.tar.gz&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://s3.amazonaws.com/bitly-downloads/nsq/nsq-1.0.0-compat.darwin-amd64.go1.8.tar.gz&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;linux: &lt;a href=&quot;https://s3.amazonaws.com/bitly-downloads/nsq/nsq-1.0.0-compat.linux-amd64.go1.8.tar.gz&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;https://s3.amazonaws.com/bitly-downloads/nsq/nsq-1.0.0-compat.linux-amd64.go1.8.tar.gz&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;解压&lt;/strong&gt;&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;tar xvf nsq.tar.gz&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-    
-    </summary>
-    
-      <category term="MQ" scheme="https://weixinote.com/categories/MQ/"/>
-    
-    
-      <category term="MQ" scheme="https://weixinote.com/tags/MQ/"/>
-    
-      <category term="NSQ" scheme="https://weixinote.com/tags/NSQ/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>[Go 教程系列笔记] Mutex（互斥锁）</title>
-    <link href="https://weixinote.com/2018/08/01/Go-%E6%95%99%E7%A8%8B%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0-Mutex%EF%BC%88%E4%BA%92%E6%96%A5%E9%94%81%EF%BC%89/"/>
-    <id>https://weixinote.com/2018/08/01/Go-教程系列笔记-Mutex（互斥锁）/</id>
-    <published>2018-08-01T10:06:37.000Z</published>
-    <updated>2019-08-14T07:10:39.560Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;在本教程中，我们将了解互斥锁。我们还将学习如何使用互斥锁和通道解决竞争问题。&lt;/p&gt;
-&lt;h3 id=&quot;临界区&quot;&gt;&lt;a href=&quot;#临界区&quot; class=&quot;headerlink&quot; title=&quot;临界区&quot;&gt;&lt;/a&gt;临界区&lt;/h3&gt;&lt;p&gt;在讲互斥锁之前，了解并发编程中&lt;strong&gt;临界区&lt;/strong&gt;的概念非常重要。当程序同时运行时，多个 goroutine 同时访问修改共享资源，修改共享资源的这段代码称为&lt;strong&gt;临界区&lt;/strong&gt;。例如，假设我们要将变量 x 递增1.&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;x = x + 1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;只要上面的代码被一个 goroutine 访问，就不会有任何问题。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
-    
-    
-      <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
-    
-      <category term="Go教程系列笔记" scheme="https://weixinote.com/tags/Go%E6%95%99%E7%A8%8B%E7%B3%BB%E5%88%97%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
