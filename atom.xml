@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://weixinote.com/"/>
-  <updated>2019-08-14T08:40:04.951Z</updated>
+  <updated>2019-12-19T08:56:07.185Z</updated>
   <id>https://weixinote.com/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>GO HTTP??</title>
+    <link href="https://weixinote.com/2019/12/19/golang-HTTP%E6%B5%8B%E8%AF%95/"/>
+    <id>https://weixinote.com/2019/12/19/golang-HTTP测试/</id>
+    <published>2019-12-19T08:55:01.000Z</published>
+    <updated>2019-12-19T08:56:07.185Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;?????????????????????????&lt;/p&gt;
+&lt;h3 id=&quot;net-http-httptest&quot;&gt;&lt;a href=&quot;#net-http-httptest&quot; class=&quot;headerlink&quot; title=&quot;???
+        
+      
+    
+    </summary>
+    
+      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
+    
+    
+      <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
+    
+      <category term="test" scheme="https://weixinote.com/tags/test/"/>
+    
+  </entry>
   
   <entry>
     <title>[Go 教程系列笔记]多态-Go中的OOP</title>
@@ -428,11 +457,11 @@
     
       <category term="Devops" scheme="https://weixinote.com/tags/Devops/"/>
     
+      <category term="ansible" scheme="https://weixinote.com/tags/ansible/"/>
+    
       <category term="gitlab" scheme="https://weixinote.com/tags/gitlab/"/>
     
       <category term="jenkins" scheme="https://weixinote.com/tags/jenkins/"/>
-    
-      <category term="ansible" scheme="https://weixinote.com/tags/ansible/"/>
     
       <category term="supervisor" scheme="https://weixinote.com/tags/supervisor/"/>
     
@@ -535,29 +564,6 @@
       <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
     
       <category term="Bug" scheme="https://weixinote.com/tags/Bug/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>[Go 标准库] sync.Once</title>
-    <link href="https://weixinote.com/2018/08/16/Go-%E6%A0%87%E5%87%86%E5%BA%93-sync-Once/"/>
-    <id>https://weixinote.com/2018/08/16/Go-标准库-sync-Once/</id>
-    <published>2018-08-16T03:13:10.000Z</published>
-    <updated>2018-12-17T08:51:23.795Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;code&gt;sync.Once&lt;/code&gt; 用来保证 Once 的 Do 只运行一次。&lt;/p&gt;
-&lt;p&gt;我们来看看 &lt;code&gt;sync.Once&lt;/code&gt; 的类型结构体：&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;type Once struct &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	m    Mutex&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	done uint32&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;p&gt;主要有两个字段，&lt;code&gt;Mutex&lt;/code&gt; 是一个互斥锁，&lt;code&gt;done&lt;/code&gt; 是一个整型。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
-    
-    
-      <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
     
   </entry>
   

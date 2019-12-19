@@ -273,6 +273,174 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://weixinote.com/2019/12/19/golang-HTTP测试/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Leon Xu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="维系笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/19/golang-HTTP测试/" itemprop="url">GO HTTP??</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-19T16:55:01+08:00">
+                2019-12-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index">
+                    <span itemprop="name">Go</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/12/19/golang-HTTP测试/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/12/19/golang-HTTP测试/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>?????????????????????????</p>
+<h3 id="net-http-httptest"><a href="#net-http-httptest" class="headerlink" title="??? net/http/httptest"></a>??? net/http/httptest</h3><p>?????? HTTP ???????</p>
+<h4 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h4><p>??<code>NewServer(handler http.Handler)</code>??????HTTP???? <code>Server</code>??????????????? <code>handler</code> ????????????????</p>
+<p>?? <code>NewTLSServer</code> ????TLS?????</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Get</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">    fmt.Fprintln(w, <span class="string">"Hello, client"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Test_Get</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    ts := httptest.NewServer(http.HandlerFunc(Get))</span><br><span class="line">    <span class="keyword">defer</span> ts.Close()</span><br><span class="line">    </span><br><span class="line">    res, err := http.Get(ts.URL)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    	t.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    greeting, err := ioutil.ReadAll(res.Body)</span><br><span class="line">    res.Body.Close()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    	t.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="ResponseRecorder-NewRequest"><a href="#ResponseRecorder-NewRequest" class="headerlink" title="ResponseRecorder ? NewRequest()"></a>ResponseRecorder ? NewRequest()</h4><p>????? Gin ??????????? <code>net/http</code>?????? <code>ResponseRecorder</code>  ?? <code>NewRequest()</code> ????????</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">router := gin.Default()</span><br><span class="line"></span><br><span class="line">params := <span class="string">`&#123;"code":1,"codemsg":"success"&#125;`</span></span><br><span class="line">w := httptest.NewRecorder()</span><br><span class="line">req := httptest.NewRequest(<span class="string">"POST"</span>, <span class="string">"/products"</span>, bytes.NewBuffer(params))</span><br><span class="line">router.ServeHTTP(w, req)</span><br><span class="line"></span><br><span class="line">result, _ := ioutil.ReadAll(w.Body)</span><br><span class="line">t.Log(<span class="string">"Resp Body"</span>, <span class="keyword">string</span>(result))</span><br><span class="line"><span class="keyword">if</span> w.Code != http.StatusCreated &#123;</span><br><span class="line">	t.Errorf(<span class="string">"????, got = %v, want = %v"</span>, w.Code, http.StatusCreated)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id=""><a href="#" class="headerlink" title="??????"></a>??????</h3><p>??????????????????????????????????????????????????????????????????????</p>
+<p>????</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">"github.com/jarcoal/httpmock"</span></span><br></pre></td></tr></table></figure>
+<p>???</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">httpmock.Activate()</span><br><span class="line">	<span class="keyword">defer</span> httpmock.DeactivateAndReset()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// our database of articles</span></span><br><span class="line">	articles := <span class="built_in">make</span>([]<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// mock to list out the articles</span></span><br><span class="line">	httpmock.RegisterResponder(<span class="string">"GET"</span>, <span class="string">"https://api.mybiz.com/articles"</span>,</span><br><span class="line">		<span class="function"><span class="keyword">func</span><span class="params">(req *http.Request)</span> <span class="params">(*http.Response, error)</span></span> &#123;</span><br><span class="line">			resp, err := httpmock.NewJsonResponse(<span class="number">200</span>, articles)</span><br><span class="line">			<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">				<span class="keyword">return</span> httpmock.NewStringResponse(<span class="number">500</span>, <span class="string">""</span>), <span class="literal">nil</span></span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> resp, <span class="literal">nil</span></span><br><span class="line">		&#125;,</span><br><span class="line">	)</span><br></pre></td></tr></table></figure>
+<p>?????<code>httpmock.DeactivateAndReset()</code> ????????? <code>http.Client</code>???????????????? <code>http.Client</code>??????????</p>
+<p>???????? <code>http.Client</code>????<code>httpmock.ActivateNonDefault(http_api.GetClient())</code>?</p>
+<h3 id="Ref"><a href="#Ref" class="headerlink" title="Ref"></a>Ref</h3><ul>
+<li><a href="https://github.com/jarcoal/httpmock" target="_blank" rel="noopener">https://github.com/jarcoal/httpmock</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://weixinote.com/2019/08/14/Go-教程系列笔记-多态-Go中的OOP/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1715,169 +1883,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://weixinote.com/2018/12/17/wrk-压测工具/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Leon Xu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="维系笔记">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/17/wrk-压测工具/" itemprop="url">wrk 压测工具</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-17T16:58:07+08:00">
-                2018-12-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Devops/" itemprop="url" rel="index">
-                    <span itemprop="name">Devops</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/12/17/wrk-压测工具/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2018/12/17/wrk-压测工具/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>wrk -c10 -t10 -d10s -s post.lua <a href="http://localhost:9005/statistic/" target="_blank" rel="noopener">http://localhost:9005/statistic/</a> ktv_reports –latency</p>
-<ul>
-<li><code>-c</code> 保持10个连接，并发数</li>
-<li><code>-t</code> 开多少个线程</li>
-<li><code>-d</code> 压测时间</li>
-<li><code>-s</code> Lua脚本</li>
-<li><code>--latency</code> 显示延迟分布</li>
-</ul>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/12/17/wrk-压测工具/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1928,7 +1933,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1950,7 +1955,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
