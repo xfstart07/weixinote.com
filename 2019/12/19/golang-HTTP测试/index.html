@@ -81,18 +81,18 @@
 
 
 
-<meta name="description" content="????????????????????????? ??? net/http/httptest?????? HTTP ??????? Server??NewServer(handler http.Handler)??????HTTP???? Server??????????????? handler ???????????????? ?? NewTLSServer ????TLS????? 123">
+<meta name="description" content="当我们在写接口的时候避免不了的需要对接口进行测试。 标准库 net/http/httptest这个包提供了 HTTP 测试使用工具。 Server通过NewServer(handler http.Handler)方法可以创建HTTP服务对象 Server。这样在创建时将需要测试的接口 handler 传入，我们就可以测试这个接口了。 还有 NewTLSServer 创建使用TLS的服务器。 123">
 <meta name="keywords" content="Go,test">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GO HTTP??">
+<meta property="og:title" content="GO HTTP测试">
 <meta property="og:url" content="https://weixinote.com/2019/12/19/golang-HTTP测试/index.html">
 <meta property="og:site_name" content="维系笔记">
-<meta property="og:description" content="????????????????????????? ??? net/http/httptest?????? HTTP ??????? Server??NewServer(handler http.Handler)??????HTTP???? Server??????????????? handler ???????????????? ?? NewTLSServer ????TLS????? 123">
+<meta property="og:description" content="当我们在写接口的时候避免不了的需要对接口进行测试。 标准库 net/http/httptest这个包提供了 HTTP 测试使用工具。 Server通过NewServer(handler http.Handler)方法可以创建HTTP服务对象 Server。这样在创建时将需要测试的接口 handler 传入，我们就可以测试这个接口了。 还有 NewTLSServer 创建使用TLS的服务器。 123">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-19T08:56:07.185Z">
+<meta property="og:updated_time" content="2019-12-19T09:06:45.859Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GO HTTP??">
-<meta name="twitter:description" content="????????????????????????? ??? net/http/httptest?????? HTTP ??????? Server??NewServer(handler http.Handler)??????HTTP???? Server??????????????? handler ???????????????? ?? NewTLSServer ????TLS????? 123">
+<meta name="twitter:title" content="GO HTTP测试">
+<meta name="twitter:description" content="当我们在写接口的时候避免不了的需要对接口进行测试。 标准库 net/http/httptest这个包提供了 HTTP 测试使用工具。 Server通过NewServer(handler http.Handler)方法可以创建HTTP服务对象 Server。这样在创建时将需要测试的接口 handler 传入，我们就可以测试这个接口了。 还有 NewTLSServer 创建使用TLS的服务器。 123">
 
 
 
@@ -128,7 +128,7 @@
 
 
 
-  <title>GO HTTP?? | 维系笔记</title>
+  <title>GO HTTP测试 | 维系笔记</title>
   
 
 
@@ -291,7 +291,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">GO HTTP??</h1>
+          <h1 class="post-title" itemprop="name headline">GO HTTP测试</h1>
         
 
         <div class="post-meta">
@@ -378,20 +378,20 @@
       
 
       
-        <p>?????????????????????????</p>
-<h3 id="net-http-httptest"><a href="#net-http-httptest" class="headerlink" title="??? net/http/httptest"></a>??? net/http/httptest</h3><p>?????? HTTP ???????</p>
-<h4 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h4><p>??<code>NewServer(handler http.Handler)</code>??????HTTP???? <code>Server</code>??????????????? <code>handler</code> ????????????????</p>
-<p>?? <code>NewTLSServer</code> ????TLS?????</p>
+        <p>当我们在写接口的时候避免不了的需要对接口进行测试。</p>
+<h3 id="标准库-net-http-httptest"><a href="#标准库-net-http-httptest" class="headerlink" title="标准库 net/http/httptest"></a>标准库 net/http/httptest</h3><p>这个包提供了 HTTP 测试使用工具。</p>
+<h4 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h4><p>通过<code>NewServer(handler http.Handler)</code>方法可以创建HTTP服务对象 <code>Server</code>。这样在创建时将需要测试的接口 <code>handler</code> 传入，我们就可以测试这个接口了。</p>
+<p>还有 <code>NewTLSServer</code> 创建使用TLS的服务器。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Get</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">    fmt.Fprintln(w, <span class="string">"Hello, client"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Test_Get</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    ts := httptest.NewServer(http.HandlerFunc(Get))</span><br><span class="line">    <span class="keyword">defer</span> ts.Close()</span><br><span class="line">    </span><br><span class="line">    res, err := http.Get(ts.URL)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    	t.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    greeting, err := ioutil.ReadAll(res.Body)</span><br><span class="line">    res.Body.Close()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    	t.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="ResponseRecorder-NewRequest"><a href="#ResponseRecorder-NewRequest" class="headerlink" title="ResponseRecorder ? NewRequest()"></a>ResponseRecorder ? NewRequest()</h4><p>????? Gin ??????????? <code>net/http</code>?????? <code>ResponseRecorder</code>  ?? <code>NewRequest()</code> ????????</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">router := gin.Default()</span><br><span class="line"></span><br><span class="line">params := <span class="string">`&#123;"code":1,"codemsg":"success"&#125;`</span></span><br><span class="line">w := httptest.NewRecorder()</span><br><span class="line">req := httptest.NewRequest(<span class="string">"POST"</span>, <span class="string">"/products"</span>, bytes.NewBuffer(params))</span><br><span class="line">router.ServeHTTP(w, req)</span><br><span class="line"></span><br><span class="line">result, _ := ioutil.ReadAll(w.Body)</span><br><span class="line">t.Log(<span class="string">"Resp Body"</span>, <span class="keyword">string</span>(result))</span><br><span class="line"><span class="keyword">if</span> w.Code != http.StatusCreated &#123;</span><br><span class="line">	t.Errorf(<span class="string">"????, got = %v, want = %v"</span>, w.Code, http.StatusCreated)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id=""><a href="#" class="headerlink" title="??????"></a>??????</h3><p>??????????????????????????????????????????????????????????????????????</p>
-<p>????</p>
+<h4 id="ResponseRecorder-和-NewRequest"><a href="#ResponseRecorder-和-NewRequest" class="headerlink" title="ResponseRecorder 和 NewRequest()"></a>ResponseRecorder 和 NewRequest()</h4><p>当使用类似 Gin 这类框架提供接口，而非 <code>net/http</code>。就需要使用 <code>ResponseRecorder</code>  配合 <code>NewRequest()</code> 来创建请求服务。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">router := gin.Default()</span><br><span class="line"></span><br><span class="line">params := <span class="string">`&#123;"code":1,"codemsg":"success"&#125;`</span></span><br><span class="line">w := httptest.NewRecorder()</span><br><span class="line">req := httptest.NewRequest(<span class="string">"POST"</span>, <span class="string">"/products"</span>, bytes.NewBuffer(params))</span><br><span class="line">router.ServeHTTP(w, req)</span><br><span class="line"></span><br><span class="line">result, _ := ioutil.ReadAll(w.Body)</span><br><span class="line">t.Log(<span class="string">"Resp Body"</span>, <span class="keyword">string</span>(result))</span><br><span class="line"><span class="keyword">if</span> w.Code != http.StatusCreated &#123;</span><br><span class="line">	t.Errorf(<span class="string">"状态不对, got = %v, want = %v"</span>, w.Code, http.StatusCreated)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="外部接口请求"><a href="#外部接口请求" class="headerlink" title="外部接口请求"></a>外部接口请求</h3><p>有时我们会调用到外部提供的接口，但是外部接口我们假设是不稳定的，如果直接在测试时发起请求不一定返回正确信息。这时我们就需要模拟这个外部接口。</p>
+<p>使用库：</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">"github.com/jarcoal/httpmock"</span></span><br></pre></td></tr></table></figure>
-<p>???</p>
+<p>例子：</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">httpmock.Activate()</span><br><span class="line">	<span class="keyword">defer</span> httpmock.DeactivateAndReset()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// our database of articles</span></span><br><span class="line">	articles := <span class="built_in">make</span>([]<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;, <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// mock to list out the articles</span></span><br><span class="line">	httpmock.RegisterResponder(<span class="string">"GET"</span>, <span class="string">"https://api.mybiz.com/articles"</span>,</span><br><span class="line">		<span class="function"><span class="keyword">func</span><span class="params">(req *http.Request)</span> <span class="params">(*http.Response, error)</span></span> &#123;</span><br><span class="line">			resp, err := httpmock.NewJsonResponse(<span class="number">200</span>, articles)</span><br><span class="line">			<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">				<span class="keyword">return</span> httpmock.NewStringResponse(<span class="number">500</span>, <span class="string">""</span>), <span class="literal">nil</span></span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> resp, <span class="literal">nil</span></span><br><span class="line">		&#125;,</span><br><span class="line">	)</span><br></pre></td></tr></table></figure>
-<p>?????<code>httpmock.DeactivateAndReset()</code> ????????? <code>http.Client</code>???????????????? <code>http.Client</code>??????????</p>
-<p>???????? <code>http.Client</code>????<code>httpmock.ActivateNonDefault(http_api.GetClient())</code>?</p>
+<p>需要注意的<code>httpmock.DeactivateAndReset()</code> 声明中默认使用的是 <code>http.Client</code>，在测试发起请求时也同样需要使用 <code>http.Client</code>，否则请求无法拦截。</p>
+<p>当然也可以自定义 <code>http.Client</code>，例如：<code>httpmock.ActivateNonDefault(http_api.GetClient())</code>。</p>
 <h3 id="Ref"><a href="#Ref" class="headerlink" title="Ref"></a>Ref</h3><ul>
 <li><a href="https://github.com/jarcoal/httpmock" target="_blank" rel="noopener">https://github.com/jarcoal/httpmock</a></li>
 </ul>
@@ -584,7 +584,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#net-http-httptest"><span class="nav-number">1.</span> <span class="nav-text">??? net/http/httptest</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Server"><span class="nav-number">1.1.</span> <span class="nav-text">Server</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ResponseRecorder-NewRequest"><span class="nav-number">1.2.</span> <span class="nav-text">ResponseRecorder ? NewRequest()</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#"><span class="nav-number">2.</span> <span class="nav-text">??????</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ref"><span class="nav-number">3.</span> <span class="nav-text">Ref</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#标准库-net-http-httptest"><span class="nav-number">1.</span> <span class="nav-text">标准库 net/http/httptest</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Server"><span class="nav-number">1.1.</span> <span class="nav-text">Server</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ResponseRecorder-和-NewRequest"><span class="nav-number">1.2.</span> <span class="nav-text">ResponseRecorder 和 NewRequest()</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#外部接口请求"><span class="nav-number">2.</span> <span class="nav-text">外部接口请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ref"><span class="nav-number">3.</span> <span class="nav-text">Ref</span></a></li></ol></div>
             
 
           </div>
@@ -779,7 +779,7 @@
         var disqus_config = function () {
           this.page.url = 'https://weixinote.com/2019/12/19/golang-HTTP测试/';
           this.page.identifier = '2019/12/19/golang-HTTP测试/';
-          this.page.title = 'GO HTTP??';
+          this.page.title = 'GO HTTP测试';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://blog-weixinote-com.disqus.com/embed.js';

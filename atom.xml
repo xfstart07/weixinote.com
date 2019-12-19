@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://weixinote.com/"/>
-  <updated>2019-12-19T08:56:07.185Z</updated>
+  <updated>2019-12-19T09:06:45.859Z</updated>
   <id>https://weixinote.com/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>GO HTTP??</title>
+    <title>GO HTTP测试</title>
     <link href="https://weixinote.com/2019/12/19/golang-HTTP%E6%B5%8B%E8%AF%95/"/>
     <id>https://weixinote.com/2019/12/19/golang-HTTP测试/</id>
     <published>2019-12-19T08:55:01.000Z</published>
-    <updated>2019-12-19T08:56:07.185Z</updated>
+    <updated>2019-12-19T09:06:45.859Z</updated>
     
     <summary type="html">
     
@@ -29,8 +29,8 @@
       
         
         
-          &lt;p&gt;?????????????????????????&lt;/p&gt;
-&lt;h3 id=&quot;net-http-httptest&quot;&gt;&lt;a href=&quot;#net-http-httptest&quot; class=&quot;headerlink&quot; title=&quot;???
+          &lt;p&gt;当我们在写接口的时候避免不了的需要对接口进行测试。&lt;/p&gt;
+&lt;h3 id=&quot;标准库-net-http-httptest&quot;&gt;&lt;a href=&quot;#标准库-net-http-httptest&quot; class=&quot;headerlink&quot; title=&quot;标准库
         
       
     
