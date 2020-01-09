@@ -261,11 +261,11 @@
     <link href="https://weixinote.com/2019/03/12/IntelliJ-IDEA-%E7%AC%94%E8%AE%B0/"/>
     <id>https://weixinote.com/2019/03/12/IntelliJ-IDEA-笔记/</id>
     <published>2019-03-12T08:56:04.000Z</published>
-    <updated>2019-03-12T08:57:26.590Z</updated>
+    <updated>2020-01-09T09:59:28.915Z</updated>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;常用快捷键&quot;&gt;&lt;a href=&quot;#常用快捷键&quot; class=&quot;headerlink&quot; title=&quot;常用快捷键&quot;&gt;&lt;/a&gt;常用快捷键&lt;/h2&gt;&lt;ul&gt;
+      &lt;h1 id=&quot;IntelliJ-IDEA-笔记&quot;&gt;&lt;a href=&quot;#IntelliJ-IDEA-笔记&quot; class=&quot;headerlink&quot; title=&quot;IntelliJ IDEA 笔记&quot;&gt;&lt;/a&gt;IntelliJ IDEA 笔记&lt;/h1&gt;&lt;h2 id=&quot;常用快捷键&quot;&gt;&lt;a href=&quot;#常用快捷键&quot; class=&quot;headerlink&quot; title=&quot;常用快捷键&quot;&gt;&lt;/a&gt;常用快捷键&lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;⌘ Command&lt;/li&gt;
 &lt;li&gt;⇧ Shift&lt;/li&gt;
 &lt;li&gt;⌥ Option&lt;/li&gt;
@@ -274,7 +274,15 @@
 &lt;li&gt;⌫ Delete&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&quot;文件相关快捷键：&quot;&gt;&lt;a href=&quot;#文件相关快捷键：&quot; class=&quot;headerlink&quot; title=&quot;文件相关快捷键：&quot;&gt;&lt;/a&gt;文件相关快捷键：&lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;Command + Shift + E，打开最近浏览过的文件。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Command + Shift + E&lt;/code&gt;，打开最近浏览过的文件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;General（通用）&quot;&gt;&lt;a href=&quot;#General（通用）&quot; class=&quot;headerlink&quot; title=&quot;General（通用）&quot;&gt;&lt;/a&gt;General（通用）&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Command + 1&lt;/code&gt; Project&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Command + 6&lt;/code&gt; TODO&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Command + 7&lt;/code&gt; Structure&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Command + 9&lt;/code&gt; Version Control&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Command + ,&lt;/code&gt; 打开IDEA系统设置&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Option + F12&lt;/code&gt; Terminal&lt;/li&gt;
 &lt;/ul&gt;
     
     </summary>
