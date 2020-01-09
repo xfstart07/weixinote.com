@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://weixinote.com/"/>
-  <updated>2019-12-19T09:06:45.859Z</updated>
+  <updated>2020-01-09T06:17:09.521Z</updated>
   <id>https://weixinote.com/</id>
   
   <author>
@@ -21,18 +21,14 @@
     <link href="https://weixinote.com/2019/12/19/golang-HTTP%E6%B5%8B%E8%AF%95/"/>
     <id>https://weixinote.com/2019/12/19/golang-HTTP测试/</id>
     <published>2019-12-19T08:55:01.000Z</published>
-    <updated>2019-12-19T09:06:45.859Z</updated>
+    <updated>2020-01-09T06:17:09.521Z</updated>
     
     <summary type="html">
     
-      
-      
-        
-        
-          &lt;p&gt;当我们在写接口的时候避免不了的需要对接口进行测试。&lt;/p&gt;
-&lt;h3 id=&quot;标准库-net-http-httptest&quot;&gt;&lt;a href=&quot;#标准库-net-http-httptest&quot; class=&quot;headerlink&quot; title=&quot;标准库
-        
-      
+      &lt;p&gt;当我们在写接口的时候避免不了的需要对接口进行测试。&lt;/p&gt;
+&lt;h3 id=&quot;标准库-net-http-httptest&quot;&gt;&lt;a href=&quot;#标准库-net-http-httptest&quot; class=&quot;headerlink&quot; title=&quot;标准库 net/http/httptest&quot;&gt;&lt;/a&gt;标准库 net/http/httptest&lt;/h3&gt;&lt;p&gt;这个包提供了 HTTP 测试使用工具。&lt;/p&gt;
+&lt;h4 id=&quot;Server&quot;&gt;&lt;a href=&quot;#Server&quot; class=&quot;headerlink&quot; title=&quot;Server&quot;&gt;&lt;/a&gt;Server&lt;/h4&gt;&lt;p&gt;通过&lt;code&gt;NewServer(handler http.Handler)&lt;/code&gt;方法可以创建HTTP服务对象 &lt;code&gt;Server&lt;/code&gt;。这样在创建时将需要测试的接口 &lt;code&gt;handler&lt;/code&gt; 传入，我们就可以测试这个接口了。&lt;/p&gt;
+&lt;p&gt;还有 &lt;code&gt;NewTLSServer&lt;/code&gt; 创建使用TLS的服务器。&lt;/p&gt;
     
     </summary>
     
