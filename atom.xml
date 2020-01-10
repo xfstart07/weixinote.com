@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://weixinote.com/"/>
-  <updated>2020-01-09T06:17:09.521Z</updated>
+  <updated>2020-01-10T08:06:33.672Z</updated>
   <id>https://weixinote.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Go交叉编译windows程序</title>
+    <link href="https://weixinote.com/2020/01/10/Go%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91windows%E7%A8%8B%E5%BA%8F/"/>
+    <id>https://weixinote.com/2020/01/10/Go交叉编译windows程序/</id>
+    <published>2020-01-10T08:05:35.000Z</published>
+    <updated>2020-01-10T08:06:33.672Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在Mac下编译一个调用了 sqlite3 的程序。&lt;/p&gt;
+&lt;h3 id=&quot;安装-sqlite3&quot;&gt;&lt;a href=&quot;#安装-sqlite3&quot; class=&quot;headerlink&quot; title=&quot;安装 sqlite3&quot;&gt;&lt;/a&gt;安装 sqlite3&lt;/h3&gt;&lt;p&gt;运行&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;go get github.com/mattn/go-sqlite3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;go install github.com/mattn/go-sqlite3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+      <category term="GO" scheme="https://weixinote.com/categories/GO/"/>
+    
+    
+      <category term="交叉编译" scheme="https://weixinote.com/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/"/>
+    
+      <category term="windows" scheme="https://weixinote.com/tags/windows/"/>
+    
+  </entry>
   
   <entry>
     <title>GO HTTP测试</title>
@@ -461,13 +485,13 @@
     
       <category term="Devops" scheme="https://weixinote.com/tags/Devops/"/>
     
-      <category term="ansible" scheme="https://weixinote.com/tags/ansible/"/>
+      <category term="supervisor" scheme="https://weixinote.com/tags/supervisor/"/>
     
       <category term="gitlab" scheme="https://weixinote.com/tags/gitlab/"/>
     
       <category term="jenkins" scheme="https://weixinote.com/tags/jenkins/"/>
     
-      <category term="supervisor" scheme="https://weixinote.com/tags/supervisor/"/>
+      <category term="ansible" scheme="https://weixinote.com/tags/ansible/"/>
     
       <category term="go" scheme="https://weixinote.com/tags/go/"/>
     
@@ -545,29 +569,6 @@
     
     
       <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>[Go 问题] 报错 &quot;flag provided but not defined: -goversion&quot;</title>
-    <link href="https://weixinote.com/2018/08/29/Go-%E9%97%AE%E9%A2%98-%E6%8A%A5%E9%94%99-goversion/"/>
-    <id>https://weixinote.com/2018/08/29/Go-问题-报错-goversion/</id>
-    <published>2018-08-29T03:47:37.000Z</published>
-    <updated>2018-12-17T08:51:23.796Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;今天 Jenkins 打包 go 项目的时候发生了一个错误，提示：“flag provided but not defined: -goversion”。&lt;/p&gt;
-&lt;p&gt;原因是因为系统中安装了两个 go 版本。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Go" scheme="https://weixinote.com/categories/Go/"/>
-    
-    
-      <category term="Go" scheme="https://weixinote.com/tags/Go/"/>
-    
-      <category term="Bug" scheme="https://weixinote.com/tags/Bug/"/>
     
   </entry>
   
